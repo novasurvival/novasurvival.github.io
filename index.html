@@ -5,7 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <title>Nova Survival</title>
-  <meta name="description" content="Nova Survival - Survive endless enemy waves, upgrade your power and push for a new high score.">
+
+  <meta
+    name="description"
+    content="Nova Survival - Survive relentless enemy waves, collect XP, build powerful upgrades and push for a new high score."
+  >
 
   <style>
     * {
@@ -21,329 +25,1382 @@
     body {
       font-family: Arial, Helvetica, sans-serif;
       background:
-        radial-gradient(circle at 50% 15%, rgba(112, 47, 255, 0.20), transparent 35%),
-        radial-gradient(circle at 20% 60%, rgba(0, 174, 255, 0.10), transparent 30%),
+        radial-gradient(circle at 50% 10%, rgba(120, 50, 255, 0.22), transparent 33%),
+        radial-gradient(circle at 15% 40%, rgba(0, 140, 255, 0.10), transparent 28%),
+        radial-gradient(circle at 85% 55%, rgba(174, 60, 255, 0.10), transparent 30%),
         #05050a;
       color: white;
       min-height: 100vh;
       overflow-x: hidden;
     }
 
-    /* NAVBAR */
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      opacity: 0.22;
+
+      background-image:
+        linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+
+      background-size: 60px 60px;
+
+      mask-image:
+        linear-gradient(to bottom, black, transparent 80%);
+
+      z-index: -5;
+    }
+
+
+    /* ================================
+       NAVBAR
+    ================================= */
 
     nav {
       width: 100%;
-      height: 75px;
+      height: 74px;
+
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 0 8%;
-      border-bottom: 1px solid rgba(255,255,255,0.08);
-      background: rgba(5,5,10,0.75);
-      backdrop-filter: blur(12px);
+
+      padding: 0 7%;
+
+      border-bottom:
+        1px solid rgba(255,255,255,0.08);
+
+      background:
+        rgba(5,5,10,0.76);
+
+      backdrop-filter:
+        blur(15px);
+
       position: fixed;
       top: 0;
-      z-index: 100;
+      z-index: 1000;
     }
 
     .logo {
-      font-size: 21px;
-      font-weight: 800;
+      font-size: 20px;
+      font-weight: 900;
       letter-spacing: 2px;
     }
 
     .logo span {
-      color: #a970ff;
+      color: #9c66ff;
     }
 
-    nav a {
-      color: #cfcfd8;
+    .nav-links {
+      display: flex;
+      align-items: center;
+    }
+
+    .nav-links a {
+      color: #bebec9;
       text-decoration: none;
-      margin-left: 28px;
-      font-size: 14px;
+      margin-left: 30px;
+
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.7px;
+
       transition: 0.2s;
     }
 
-    nav a:hover {
+    .nav-links a:hover {
       color: white;
     }
 
-    /* HERO */
+
+    /* ================================
+       HERO
+    ================================= */
 
     .hero {
       min-height: 100vh;
+
       display: flex;
       align-items: center;
       justify-content: center;
+
       text-align: center;
-      padding: 130px 20px 70px;
+
+      padding:
+        130px 20px
+        80px;
+
       position: relative;
+      isolation: isolate;
     }
 
-    .glow {
+    .hero-glow {
       position: absolute;
-      width: 500px;
-      height: 500px;
-      border-radius: 50%;
-      background: rgba(111, 45, 255, 0.12);
-      filter: blur(90px);
-      z-index: -1;
+
+      width: 600px;
+      height: 600px;
+
+      background:
+        rgba(108, 51, 255, 0.16);
+
+      filter:
+        blur(110px);
+
+      border-radius:
+        50%;
+
+      z-index: -4;
     }
 
     .hero-content {
       max-width: 900px;
+      z-index: 10;
     }
 
     .mini-title {
-      color: #a970ff;
-      font-size: 13px;
-      font-weight: bold;
+      color: #9e70ff;
+
+      font-size: 12px;
+      font-weight: 800;
+
       letter-spacing: 5px;
-      margin-bottom: 22px;
+
+      margin-bottom: 24px;
     }
 
     h1 {
-      font-size: clamp(55px, 9vw, 105px);
-      line-height: 0.95;
-      font-weight: 900;
-      letter-spacing: -4px;
+      font-size:
+        clamp(56px, 9vw, 108px);
+
+      line-height: 0.9;
+
+      font-weight: 950;
+
+      letter-spacing: -5px;
+
       text-shadow:
-        0 0 30px rgba(132, 76, 255, 0.35),
-        0 0 80px rgba(58, 137, 255, 0.12);
+        0 0 30px
+        rgba(132, 76, 255, 0.30),
+
+        0 0 80px
+        rgba(58, 137, 255, 0.14);
     }
 
     .gradient-text {
-      background: linear-gradient(90deg, #ffffff, #a970ff, #5aa7ff);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
+      background:
+        linear-gradient(
+          90deg,
+          #ffffff,
+          #ae7aff,
+          #64aaff
+        );
+
+      -webkit-background-clip:
+        text;
+
+      -webkit-text-fill-color:
+        transparent;
     }
 
     .tagline {
-      margin-top: 25px;
-      font-size: clamp(20px, 3vw, 29px);
-      font-weight: 700;
-      color: #dedee8;
+      margin-top: 26px;
+
+      font-size:
+        clamp(20px, 3vw, 30px);
+
+      font-weight: 800;
+
+      color:
+        #e2e2ec;
     }
 
     .description {
       max-width: 650px;
-      margin: 22px auto 0;
-      color: #9292a2;
-      font-size: 16px;
-      line-height: 1.8;
+
+      margin:
+        22px auto 0;
+
+      color:
+        #9898a9;
+
+      font-size:
+        16px;
+
+      line-height:
+        1.8;
     }
 
     .buttons {
-      margin-top: 38px;
-      display: flex;
-      justify-content: center;
-      gap: 15px;
-      flex-wrap: wrap;
+      margin-top:
+        38px;
+
+      display:
+        flex;
+
+      justify-content:
+        center;
+
+      gap:
+        14px;
+
+      flex-wrap:
+        wrap;
     }
 
     .button {
-      display: inline-block;
-      padding: 16px 27px;
-      border-radius: 12px;
-      text-decoration: none;
-      font-weight: bold;
-      font-size: 14px;
-      transition: 0.25s;
+      display:
+        inline-flex;
+
+      align-items:
+        center;
+
+      justify-content:
+        center;
+
+      padding:
+        16px 27px;
+
+      border-radius:
+        12px;
+
+      text-decoration:
+        none;
+
+      font-weight:
+        800;
+
+      font-size:
+        13px;
+
+      letter-spacing:
+        0.4px;
+
+      transition:
+        0.25s;
     }
 
     .primary {
-      color: white;
-      background: linear-gradient(135deg, #713cff, #326dff);
-      box-shadow: 0 0 30px rgba(104, 60, 255, 0.3);
+      color:
+        white;
+
+      background:
+        linear-gradient(
+          135deg,
+          #7742ff,
+          #326dff
+        );
+
+      box-shadow:
+        0 0 30px
+        rgba(104, 60, 255, 0.30);
     }
 
     .primary:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 0 45px rgba(104, 60, 255, 0.5);
+      transform:
+        translateY(-3px);
+
+      box-shadow:
+        0 0 50px
+        rgba(104, 60, 255, 0.52);
     }
 
     .secondary {
-      color: #d9d9e3;
-      border: 1px solid rgba(255,255,255,0.15);
-      background: rgba(255,255,255,0.04);
+      color:
+        #dfdfe8;
+
+      border:
+        1px solid
+        rgba(255,255,255,0.15);
+
+      background:
+        rgba(255,255,255,0.04);
     }
 
     .secondary:hover {
-      background: rgba(255,255,255,0.08);
-      transform: translateY(-3px);
+      background:
+        rgba(255,255,255,0.08);
+
+      transform:
+        translateY(-3px);
     }
 
-    /* FEATURES */
+
+    /* ================================
+       LEFT ENERGY DRONE
+    ================================= */
+
+    .drone-wrap {
+      position: absolute;
+
+      left: 4%;
+      top: 54%;
+
+      transform:
+        translateY(-50%);
+
+      width:
+        220px;
+
+      height:
+        300px;
+
+      z-index:
+        2;
+
+      filter:
+        drop-shadow(
+          0 0 30px
+          rgba(73, 149, 255, 0.23)
+        );
+    }
+
+    .drone {
+      position: absolute;
+
+      left: 50%;
+      top: 50%;
+
+      transform:
+        translate(-50%, -50%);
+
+      width:
+        120px;
+
+      height:
+        120px;
+
+      border-radius:
+        28%;
+
+      border:
+        2px solid
+        rgba(127, 188, 255, 0.55);
+
+      background:
+        linear-gradient(
+          145deg,
+          #1b2032,
+          #090b13
+        );
+
+      box-shadow:
+        inset 0 0 28px
+        rgba(79, 145, 255, 0.12),
+
+        0 0 40px
+        rgba(59, 122, 255, 0.18);
+
+      animation:
+        floatDrone
+        4s
+        ease-in-out
+        infinite;
+    }
+
+    .drone::before,
+    .drone::after {
+      content: "";
+
+      position: absolute;
+
+      top:
+        42px;
+
+      width:
+        72px;
+
+      height:
+        25px;
+
+      border:
+        2px solid
+        rgba(133, 186, 255, 0.42);
+
+      background:
+        linear-gradient(
+          90deg,
+          rgba(42, 70, 110, 0.5),
+          rgba(13, 18, 30, 0.9)
+        );
+
+      z-index:
+        -1;
+    }
+
+    .drone::before {
+      left:
+        -66px;
+
+      transform:
+        rotate(-13deg);
+
+      border-radius:
+        14px 0 0 14px;
+    }
+
+    .drone::after {
+      right:
+        -66px;
+
+      transform:
+        rotate(13deg);
+
+      border-radius:
+        0 14px 14px 0;
+    }
+
+    .drone-core {
+      position:
+        absolute;
+
+      left:
+        50%;
+
+      top:
+        50%;
+
+      transform:
+        translate(-50%, -50%);
+
+      width:
+        52px;
+
+      height:
+        52px;
+
+      border-radius:
+        50%;
+
+      border:
+        3px solid
+        rgba(138, 205, 255, 0.85);
+
+      background:
+        radial-gradient(
+          circle,
+          #d7f3ff 0%,
+          #4ca8ff 18%,
+          #2269ff 40%,
+          #10265f 62%,
+          #050912 72%
+        );
+
+      box-shadow:
+        0 0 12px #6cc4ff,
+        0 0 32px #347cff,
+        0 0 65px rgba(55, 105, 255, 0.6);
+
+      animation:
+        corePulse
+        2.3s
+        ease-in-out
+        infinite;
+    }
+
+    .drone-ring {
+      position:
+        absolute;
+
+      inset:
+        -22px;
+
+      border:
+        1px solid
+        rgba(92, 158, 255, 0.25);
+
+      border-radius:
+        50%;
+
+      animation:
+        rotateRing
+        8s
+        linear
+        infinite;
+    }
+
+    .drone-ring::before,
+    .drone-ring::after {
+      content: "";
+
+      position:
+        absolute;
+
+      width:
+        7px;
+
+      height:
+        7px;
+
+      background:
+        #79c8ff;
+
+      border-radius:
+        50%;
+
+      box-shadow:
+        0 0 12px #52a9ff;
+    }
+
+    .drone-ring::before {
+      top:
+        7px;
+
+      left:
+        19px;
+    }
+
+    .drone-ring::after {
+      bottom:
+        7px;
+
+      right:
+        19px;
+    }
+
+
+    /* ================================
+       RIGHT SHADOW ARMOR
+    ================================= */
+
+    .armor-wrap {
+      position:
+        absolute;
+
+      right:
+        2.5%;
+
+      bottom:
+        5%;
+
+      width:
+        260px;
+
+      height:
+        480px;
+
+      z-index:
+        2;
+
+      opacity:
+        0.92;
+    }
+
+    .armor-glow {
+      position:
+        absolute;
+
+      width:
+        210px;
+
+      height:
+        320px;
+
+      left:
+        25px;
+
+      top:
+        80px;
+
+      border-radius:
+        50%;
+
+      background:
+        rgba(125, 50, 255, 0.14);
+
+      filter:
+        blur(60px);
+
+      z-index:
+        -1;
+    }
+
+    .armor-head {
+      position:
+        absolute;
+
+      top:
+        45px;
+
+      left:
+        88px;
+
+      width:
+        85px;
+
+      height:
+        95px;
+
+      background:
+        linear-gradient(
+          145deg,
+          #20202c,
+          #09090f
+        );
+
+      clip-path:
+        polygon(
+          20% 5%,
+          80% 5%,
+          100% 28%,
+          87% 88%,
+          50% 100%,
+          13% 88%,
+          0 28%
+        );
+
+      border-radius:
+        15px;
+
+      box-shadow:
+        0 0 30px
+        rgba(137, 62, 255, 0.20);
+    }
+
+    .visor {
+      position:
+        absolute;
+
+      left:
+        15px;
+
+      top:
+        39px;
+
+      width:
+        55px;
+
+      height:
+        10px;
+
+      border-radius:
+        50px;
+
+      background:
+        linear-gradient(
+          90deg,
+          #4420ff,
+          #c76eff,
+          #532eff
+        );
+
+      box-shadow:
+        0 0 10px #a550ff,
+        0 0 24px rgba(145, 55, 255, 0.75);
+    }
+
+    .armor-body {
+      position:
+        absolute;
+
+      top:
+        125px;
+
+      left:
+        50px;
+
+      width:
+        160px;
+
+      height:
+        210px;
+
+      background:
+        linear-gradient(
+          145deg,
+          #20202b,
+          #0a0a10 70%
+        );
+
+      clip-path:
+        polygon(
+          20% 0,
+          80% 0,
+          100% 25%,
+          82% 100%,
+          18% 100%,
+          0 25%
+        );
+
+      box-shadow:
+        inset 0 0 35px
+        rgba(133, 53, 255, 0.10);
+    }
+
+    .armor-core {
+      position:
+        absolute;
+
+      left:
+        55px;
+
+      top:
+        55px;
+
+      width:
+        50px;
+
+      height:
+        50px;
+
+      border-radius:
+        50%;
+
+      border:
+        2px solid
+        #925cff;
+
+      background:
+        radial-gradient(
+          circle,
+          #e7c7ff,
+          #9a4cff 22%,
+          #411d8f 45%,
+          #090512 68%
+        );
+
+      box-shadow:
+        0 0 18px #a45dff,
+        0 0 45px rgba(139, 48, 255, 0.45);
+    }
+
+    .armor-line {
+      position:
+        absolute;
+
+      height:
+        3px;
+
+      background:
+        linear-gradient(
+          90deg,
+          transparent,
+          #9857ff,
+          transparent
+        );
+
+      box-shadow:
+        0 0 9px
+        rgba(155, 81, 255, 0.8);
+    }
+
+    .line-one {
+      width:
+        90px;
+
+      left:
+        35px;
+
+      top:
+        128px;
+
+      transform:
+        rotate(18deg);
+    }
+
+    .line-two {
+      width:
+        90px;
+
+      right:
+        35px;
+
+      top:
+        128px;
+
+      transform:
+        rotate(-18deg);
+    }
+
+    .armor-leg {
+      position:
+        absolute;
+
+      top:
+        315px;
+
+      width:
+        60px;
+
+      height:
+        125px;
+
+      background:
+        linear-gradient(
+          180deg,
+          #171720,
+          #08080d
+        );
+
+      border-bottom:
+        2px solid
+        rgba(154, 82, 255, 0.4);
+    }
+
+    .leg-left {
+      left:
+        65px;
+
+      transform:
+        skew(-4deg);
+    }
+
+    .leg-right {
+      right:
+        65px;
+
+      transform:
+        skew(4deg);
+    }
+
+
+    /* ================================
+       FEATURES
+    ================================= */
 
     .features {
-      max-width: 1100px;
-      margin: auto;
-      padding: 100px 25px 130px;
+      max-width:
+        1120px;
+
+      margin:
+        auto;
+
+      padding:
+        110px 25px 130px;
     }
 
     .section-title {
-      text-align: center;
-      margin-bottom: 55px;
+      text-align:
+        center;
+
+      margin-bottom:
+        55px;
     }
 
     .section-title p {
-      color: #8f65ff;
-      font-weight: bold;
-      letter-spacing: 4px;
-      font-size: 12px;
-      margin-bottom: 12px;
+      color:
+        #9263ff;
+
+      font-weight:
+        800;
+
+      letter-spacing:
+        4px;
+
+      font-size:
+        12px;
+
+      margin-bottom:
+        12px;
     }
 
     .section-title h2 {
-      font-size: clamp(32px, 5vw, 48px);
+      font-size:
+        clamp(32px, 5vw, 48px);
     }
 
     .cards {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 18px;
+      display:
+        grid;
+
+      grid-template-columns:
+        repeat(3, 1fr);
+
+      gap:
+        18px;
     }
 
     .card {
-      min-height: 210px;
-      padding: 30px;
-      border-radius: 18px;
-      background: linear-gradient(
-        145deg,
-        rgba(255,255,255,0.055),
-        rgba(255,255,255,0.018)
-      );
-      border: 1px solid rgba(255,255,255,0.09);
-      transition: 0.25s;
+      min-height:
+        215px;
+
+      padding:
+        30px;
+
+      border-radius:
+        18px;
+
+      background:
+        linear-gradient(
+          145deg,
+          rgba(255,255,255,0.055),
+          rgba(255,255,255,0.018)
+        );
+
+      border:
+        1px solid
+        rgba(255,255,255,0.09);
+
+      transition:
+        0.25s;
+
+      position:
+        relative;
+
+      overflow:
+        hidden;
+    }
+
+    .card::after {
+      content: "";
+
+      position:
+        absolute;
+
+      width:
+        110px;
+
+      height:
+        110px;
+
+      right:
+        -40px;
+
+      bottom:
+        -40px;
+
+      border-radius:
+        50%;
+
+      background:
+        rgba(115, 65, 255, 0.08);
+
+      filter:
+        blur(20px);
     }
 
     .card:hover {
-      transform: translateY(-6px);
-      border-color: rgba(146, 92, 255, 0.45);
-      box-shadow: 0 15px 45px rgba(0,0,0,0.35);
+      transform:
+        translateY(-6px);
+
+      border-color:
+        rgba(146, 92, 255, 0.45);
+
+      box-shadow:
+        0 15px 45px
+        rgba(0,0,0,0.35);
     }
 
     .number {
-      color: #9667ff;
-      font-size: 13px;
-      font-weight: bold;
-      margin-bottom: 22px;
+      color:
+        #9667ff;
+
+      font-size:
+        13px;
+
+      font-weight:
+        800;
+
+      margin-bottom:
+        22px;
     }
 
     .card h3 {
-      margin-bottom: 12px;
-      font-size: 20px;
+      margin-bottom:
+        12px;
+
+      font-size:
+        20px;
     }
 
     .card p {
-      color: #9696a5;
-      font-size: 14px;
-      line-height: 1.7;
+      color:
+        #9696a5;
+
+      font-size:
+        14px;
+
+      line-height:
+        1.7;
     }
 
-    /* CTA */
+
+    /* ================================
+       CTA
+    ================================= */
 
     .cta {
-      max-width: 1050px;
-      margin: 0 auto 100px;
-      padding: 75px 25px;
-      text-align: center;
-      border-radius: 25px;
-      border: 1px solid rgba(255,255,255,0.08);
+      max-width:
+        1050px;
+
+      margin:
+        0 auto 100px;
+
+      padding:
+        80px 25px;
+
+      text-align:
+        center;
+
+      border-radius:
+        25px;
+
+      border:
+        1px solid
+        rgba(255,255,255,0.08);
+
       background:
-        radial-gradient(circle at center, rgba(104, 56, 255, 0.18), transparent 60%),
+        radial-gradient(
+          circle at center,
+          rgba(104, 56, 255, 0.18),
+          transparent 60%
+        ),
         rgba(255,255,255,0.025);
+
+      position:
+        relative;
+
+      overflow:
+        hidden;
+    }
+
+    .cta::before {
+      content: "";
+
+      position:
+        absolute;
+
+      width:
+        300px;
+
+      height:
+        300px;
+
+      left:
+        -150px;
+
+      top:
+        -150px;
+
+      border:
+        1px solid
+        rgba(123, 81, 255, 0.12);
+
+      border-radius:
+        50%;
     }
 
     .cta h2 {
-      font-size: clamp(35px, 5vw, 55px);
-      margin-bottom: 17px;
+      font-size:
+        clamp(35px, 5vw, 55px);
+
+      margin-bottom:
+        17px;
+
+      position:
+        relative;
     }
 
     .cta p {
-      color: #9898a8;
-      margin-bottom: 30px;
+      color:
+        #9898a8;
+
+      margin-bottom:
+        30px;
+
+      position:
+        relative;
     }
 
-    /* FOOTER */
+
+    /* ================================
+       FOOTER
+    ================================= */
 
     footer {
-      border-top: 1px solid rgba(255,255,255,0.07);
-      padding: 35px 8%;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      color: #696977;
-      font-size: 13px;
+      border-top:
+        1px solid
+        rgba(255,255,255,0.07);
+
+      padding:
+        35px 8%;
+
+      display:
+        flex;
+
+      justify-content:
+        space-between;
+
+      align-items:
+        center;
+
+      color:
+        #696977;
+
+      font-size:
+        13px;
     }
 
     footer a {
-      color: #9999a7;
-      text-decoration: none;
-      margin-left: 20px;
+      color:
+        #9999a7;
+
+      text-decoration:
+        none;
+
+      margin-left:
+        20px;
     }
 
     footer a:hover {
-      color: white;
+      color:
+        white;
     }
 
-    @media (max-width: 800px) {
-      nav {
-        padding: 0 5%;
+
+    /* ================================
+       ANIMATIONS
+    ================================= */
+
+    @keyframes floatDrone {
+      0% {
+        transform:
+          translate(-50%, -50%);
       }
 
-      nav .links {
-        display: none;
+      50% {
+        transform:
+          translate(-50%, calc(-50% - 14px));
+      }
+
+      100% {
+        transform:
+          translate(-50%, -50%);
+      }
+    }
+
+    @keyframes corePulse {
+      0%, 100% {
+        transform:
+          translate(-50%, -50%)
+          scale(1);
+
+        opacity:
+          0.9;
+      }
+
+      50% {
+        transform:
+          translate(-50%, -50%)
+          scale(1.08);
+
+        opacity:
+          1;
+      }
+    }
+
+    @keyframes rotateRing {
+      from {
+        transform:
+          rotate(0deg);
+      }
+
+      to {
+        transform:
+          rotate(360deg);
+      }
+    }
+
+
+    /* ================================
+       RESPONSIVE
+    ================================= */
+
+    @media (max-width: 1200px) {
+
+      .drone-wrap {
+        left:
+          -20px;
+
+        opacity:
+          0.6;
+
+        transform:
+          translateY(-50%)
+          scale(0.8);
+      }
+
+      .armor-wrap {
+        right:
+          -45px;
+
+        opacity:
+          0.6;
+
+        transform:
+          scale(0.82);
+
+        transform-origin:
+          bottom right;
+      }
+
+    }
+
+
+    @media (max-width: 900px) {
+
+      .drone-wrap,
+      .armor-wrap {
+        display:
+          none;
+      }
+
+      .hero-content {
+        max-width:
+          760px;
+      }
+
+    }
+
+
+    @media (max-width: 800px) {
+
+      nav {
+        padding:
+          0 5%;
+      }
+
+      .nav-links {
+        display:
+          none;
       }
 
       h1 {
-        letter-spacing: -2px;
+        letter-spacing:
+          -2px;
       }
 
       .cards {
-        grid-template-columns: 1fr;
+        grid-template-columns:
+          1fr;
       }
 
       .features {
-        padding-top: 70px;
+        padding-top:
+          70px;
       }
 
       .cta {
-        margin-left: 20px;
-        margin-right: 20px;
+        margin-left:
+          20px;
+
+        margin-right:
+          20px;
       }
 
       footer {
-        flex-direction: column;
-        gap: 15px;
-        text-align: center;
+        flex-direction:
+          column;
+
+        gap:
+          15px;
+
+        text-align:
+          center;
       }
 
       footer a {
-        margin: 0 8px;
+        margin:
+          0 8px;
       }
+
     }
   </style>
 </head>
 
+
 <body>
 
-  <nav>
-    <div class="logo">NOVA <span>SURVIVAL</span></div>
 
-    <div class="links">
-      <a href="#game">GAME</a>
-      <a href="#features">FEATURES</a>
-      <a href="https://sites.google.com/view/novasurvivalprivacypolicy/ana-sayfa">
+  <!-- NAVIGATION -->
+
+  <nav>
+
+    <div class="logo">
+      NOVA <span>SURVIVAL</span>
+    </div>
+
+    <div class="nav-links">
+
+      <a href="#game">
+        GAME
+      </a>
+
+      <a href="#features">
+        FEATURES
+      </a>
+
+      <a
+        href="https://sites.google.com/view/novasurvivalprivacypolicy/ana-sayfa"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
         PRIVACY
       </a>
+
     </div>
+
   </nav>
 
 
-  <section class="hero" id="game">
 
-    <div class="glow"></div>
+  <!-- HERO -->
+
+  <section
+    class="hero"
+    id="game"
+  >
+
+    <div class="hero-glow"></div>
+
+
+    <!-- LEFT DRONE -->
+
+    <div class="drone-wrap">
+
+      <div class="drone">
+
+        <div class="drone-ring"></div>
+
+        <div class="drone-core"></div>
+
+      </div>
+
+    </div>
+
+
+
+    <!-- RIGHT ARMOR -->
+
+    <div class="armor-wrap">
+
+      <div class="armor-glow"></div>
+
+      <div class="armor-head">
+
+        <div class="visor"></div>
+
+      </div>
+
+      <div class="armor-body">
+
+        <div class="armor-core"></div>
+
+        <div class="armor-line line-one"></div>
+
+        <div class="armor-line line-two"></div>
+
+      </div>
+
+      <div class="armor-leg leg-left"></div>
+
+      <div class="armor-leg leg-right"></div>
+
+    </div>
+
+
+
+    <!-- HERO CONTENT -->
 
     <div class="hero-content">
 
@@ -351,111 +1408,217 @@
         SURVIVAL • ACTION • ROGUELITE
       </div>
 
+
       <h1>
-        <span class="gradient-text">NOVA</span><br>
+
+        <span class="gradient-text">
+          NOVA
+        </span>
+
+        <br>
+
         SURVIVAL
+
       </h1>
+
 
       <div class="tagline">
         Survive. Upgrade. Dominate.
       </div>
 
+
       <p class="description">
-        Enter a fast-paced survival battle against relentless waves of enemies.
-        Collect XP, level up, build powerful combinations and fight to survive
-        longer with every run.
+
+        Enter a fast-paced survival battle against
+        relentless waves of enemies.
+
+        Collect XP, level up, create powerful upgrade
+        combinations and fight to survive longer with
+        every run.
+
       </p>
+
 
       <div class="buttons">
 
         <a
           class="button primary"
-          href="https://play.google.com/store/apps/details?id=com.novasurvival.android">
+          href="https://play.google.com/store/apps/details?id=com.novasurvival.android"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
           PLAY ON GOOGLE PLAY
         </a>
 
+
         <a
           class="button secondary"
-          href="#features">
+          href="#features"
+        >
           EXPLORE THE GAME
         </a>
 
       </div>
 
     </div>
+
   </section>
 
 
-  <section class="features" id="features">
+
+  <!-- FEATURES -->
+
+  <section
+    class="features"
+    id="features"
+  >
 
     <div class="section-title">
-      <p>THE GAME</p>
-      <h2>Fight. Adapt. Survive.</h2>
+
+      <p>
+        THE GAME
+      </p>
+
+      <h2>
+        Fight. Adapt. Survive.
+      </h2>
+
     </div>
+
 
     <div class="cards">
 
-      <div class="card">
-        <div class="number">01</div>
-        <h3>Survive the Waves</h3>
-        <p>
-          Face increasingly dangerous waves of enemies and push your survival
-          skills as far as possible.
-        </p>
-      </div>
 
       <div class="card">
-        <div class="number">02</div>
-        <h3>Build Your Power</h3>
+
+        <div class="number">
+          01
+        </div>
+
+        <h3>
+          Survive the Waves
+        </h3>
+
         <p>
-          Collect XP, level up and choose powerful upgrades to create a stronger
-          build during every run.
+          Face increasingly dangerous waves of enemies
+          and push your survival skills as far as possible.
         </p>
+
       </div>
 
-      <div class="card">
-        <div class="number">03</div>
-        <h3>Different Enemies</h3>
-        <p>
-          Fight multiple enemy types with different behaviors and threats that
-          force you to constantly adapt.
-        </p>
-      </div>
+
 
       <div class="card">
-        <div class="number">04</div>
-        <h3>Choose Your Difficulty</h3>
+
+        <div class="number">
+          02
+        </div>
+
+        <h3>
+          Build Your Power
+        </h3>
+
         <p>
-          Take on different difficulty levels and increase the challenge when
-          you're ready for something more brutal.
+          Collect XP, level up and choose powerful
+          upgrades to create a stronger build during
+          every run.
         </p>
+
       </div>
 
-      <div class="card">
-        <div class="number">05</div>
-        <h3>Unlock & Customize</h3>
-        <p>
-          Unlock items and cosmetics, customize your experience and discover
-          new ways to enter the battlefield.
-        </p>
-      </div>
+
 
       <div class="card">
-        <div class="number">06</div>
-        <h3>Chase Your High Score</h3>
+
+        <div class="number">
+          03
+        </div>
+
+        <h3>
+          Different Enemies
+        </h3>
+
         <p>
-          Defeat more enemies, survive longer and keep pushing to beat your
-          highest score.
+          Fight different enemy types with unique
+          behaviors and threats that force you to
+          constantly adapt.
         </p>
+
       </div>
+
+
+
+      <div class="card">
+
+        <div class="number">
+          04
+        </div>
+
+        <h3>
+          Choose Your Difficulty
+        </h3>
+
+        <p>
+          Take on different difficulty levels and
+          increase the challenge when you're ready
+          for something more dangerous.
+        </p>
+
+      </div>
+
+
+
+      <div class="card">
+
+        <div class="number">
+          05
+        </div>
+
+        <h3>
+          Unlock & Customize
+        </h3>
+
+        <p>
+          Unlock items and cosmetics, customize your
+          experience and enter the battlefield with
+          your own style.
+        </p>
+
+      </div>
+
+
+
+      <div class="card">
+
+        <div class="number">
+          06
+        </div>
+
+        <h3>
+          Chase Your High Score
+        </h3>
+
+        <p>
+          Defeat more enemies, survive longer and keep
+          pushing until you beat your highest score.
+        </p>
+
+      </div>
+
 
     </div>
+
   </section>
 
 
+
+  <!-- CALL TO ACTION -->
+
   <section class="cta">
 
-    <h2>How long can you survive?</h2>
+    <h2>
+      How long can you survive?
+    </h2>
 
     <p>
       Enter Nova Survival and push your build to its limit.
@@ -463,12 +1626,18 @@
 
     <a
       class="button primary"
-      href="https://play.google.com/store/apps/details?id=com.novasurvival.android">
+      href="https://play.google.com/store/apps/details?id=com.novasurvival.android"
+      target="_blank"
+      rel="noopener noreferrer"
+    >
       PLAY NOW
     </a>
 
   </section>
 
+
+
+  <!-- FOOTER -->
 
   <footer>
 
@@ -476,17 +1645,28 @@
       © 2026 Nova Survival. All rights reserved.
     </div>
 
+
     <div>
-      <a href="https://sites.google.com/view/novasurvivalprivacypolicy/ana-sayfa">
+
+      <a
+        href="https://sites.google.com/view/novasurvivalprivacypolicy/ana-sayfa"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
         Privacy Policy
       </a>
 
-      <a href="mailto:novasurvivalgame@gmail.com">
+
+      <a
+        href="mailto:novasurvivalgame@gmail.com"
+      >
         Contact
       </a>
+
     </div>
 
   </footer>
+
 
 </body>
 </html>
