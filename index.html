@@ -159,28 +159,163 @@
     .button.secondary:hover{transform:translateY(-3px);background:rgba(255,255,255,.08)}
 
     .hero-visual{
-      min-height:660px;position:relative;
+      min-height:660px;
+      position:relative;
+      display:grid;
+      place-items:center;
+      isolation:isolate;
     }
-    .phone{
-      position:absolute;border-radius:30px;overflow:hidden;
-      border:1px solid rgba(255,255,255,.16);
-      box-shadow:var(--shadow),0 0 65px rgba(114,58,255,.15);
-      background:#0b0914;
+
+    .nova-orbit{
+      position:relative;
+      width:min(560px,92%);
+      aspect-ratio:1/1;
+      display:grid;
+      place-items:center;
+      filter:drop-shadow(0 0 34px rgba(120,70,255,.26));
     }
-    .phone img{width:100%;height:100%;object-fit:cover}
-    .phone.main{
-      width:330px;aspect-ratio:1080/2237;
-      right:8%;top:0;transform:rotate(3deg);
-      z-index:3;
+
+    .nova-orbit::before{
+      content:"";
+      position:absolute;
+      inset:8%;
+      border-radius:50%;
+      background:
+        radial-gradient(circle,rgba(152,88,255,.18) 0%,rgba(77,37,160,.08) 38%,transparent 66%);
+      filter:blur(16px);
+      animation:orbitPulse 3.8s ease-in-out infinite;
     }
-    .phone.back{
-      width:250px;aspect-ratio:1080/2190;
-      left:0;top:90px;transform:rotate(-7deg);
-      opacity:.72;filter:saturate(.9) brightness(.8);
-      z-index:1;
+
+    .orbit-ring{
+      position:absolute;
+      border-radius:50%;
+      border:1px solid rgba(162,117,255,.34);
+      box-shadow:
+        0 0 24px rgba(125,75,255,.16),
+        inset 0 0 24px rgba(125,75,255,.06);
     }
+
+    .ring-a{
+      width:78%;
+      height:78%;
+      animation:spinClockwise 13s linear infinite;
+    }
+
+    .ring-b{
+      width:58%;
+      height:58%;
+      border-color:rgba(91,169,255,.28);
+      animation:spinCounter 8s linear infinite;
+    }
+
+    .ring-c{
+      width:92%;
+      height:92%;
+      border-style:dashed;
+      border-color:rgba(157,112,255,.18);
+      animation:spinClockwise 20s linear infinite;
+    }
+
+    .ring-dot{
+      position:absolute;
+      width:11px;
+      height:11px;
+      border-radius:50%;
+      background:linear-gradient(135deg,#d6c1ff,#7b4dff);
+      box-shadow:
+        0 0 10px #a976ff,
+        0 0 24px rgba(129,77,255,.8);
+    }
+
+    .ring-a .ring-dot.one{top:7%;left:24%}
+    .ring-a .ring-dot.two{right:7%;bottom:25%}
+    .ring-b .ring-dot.one{top:12%;right:17%}
+    .ring-b .ring-dot.two{left:8%;bottom:18%}
+
+    .nova-core-shell{
+      position:relative;
+      z-index:5;
+      width:210px;
+      aspect-ratio:1/1;
+      display:grid;
+      place-items:center;
+      transform:rotate(45deg);
+      border-radius:34px;
+      background:
+        linear-gradient(145deg,rgba(55,34,106,.95),rgba(17,11,31,.98));
+      border:1px solid rgba(175,124,255,.58);
+      box-shadow:
+        inset 0 0 36px rgba(144,79,255,.18),
+        0 0 28px rgba(111,61,255,.34),
+        0 0 75px rgba(85,42,210,.25);
+      animation:coreFloat 4.5s ease-in-out infinite;
+    }
+
+    .nova-core-shell::before,
+    .nova-core-shell::after{
+      content:"";
+      position:absolute;
+      border-radius:26px;
+      inset:18px;
+      border:1px solid rgba(172,126,255,.34);
+    }
+
+    .nova-core-shell::after{
+      inset:38px;
+      border-color:rgba(117,173,255,.22);
+      box-shadow:inset 0 0 28px rgba(84,139,255,.12);
+    }
+
+    .nova-core{
+      width:94px;
+      height:94px;
+      border-radius:50%;
+      transform:rotate(-45deg);
+      background:
+        radial-gradient(circle at 50% 48%,
+          #f3e8ff 0%,
+          #d7b8ff 10%,
+          #a66dff 22%,
+          #7847ff 37%,
+          #43218f 54%,
+          #170b31 72%,
+          #090711 100%);
+      border:2px solid rgba(218,192,255,.9);
+      box-shadow:
+        0 0 14px #c391ff,
+        0 0 34px rgba(161,95,255,.95),
+        0 0 74px rgba(103,55,255,.72);
+      position:relative;
+      animation:corePulse 2.5s ease-in-out infinite;
+    }
+
+    .nova-core::before{
+      content:"";
+      position:absolute;
+      inset:14px;
+      border-radius:50%;
+      border:1px solid rgba(255,255,255,.38);
+      box-shadow:inset 0 0 18px rgba(255,255,255,.12);
+    }
+
+    .energy-spark{
+      position:absolute;
+      width:5px;
+      height:5px;
+      border-radius:50%;
+      background:#ba8cff;
+      box-shadow:0 0 12px #9d66ff;
+      opacity:.8;
+      animation:sparkDrift 5s ease-in-out infinite;
+    }
+
+    .spark-1{left:12%;top:22%}
+    .spark-2{right:10%;top:38%;animation-delay:.8s}
+    .spark-3{left:20%;bottom:14%;animation-delay:1.6s}
+    .spark-4{right:18%;bottom:18%;animation-delay:2.3s}
+
     .float-pill{
-      position:absolute;z-index:5;
+      position:absolute;z-index:6;
       padding:11px 14px;border-radius:999px;
       background:rgba(17,14,31,.82);
       border:1px solid rgba(255,255,255,.12);
@@ -188,8 +323,38 @@
       font-size:12px;font-weight:850;letter-spacing:.3px;
       box-shadow:0 12px 30px rgba(0,0,0,.35);
     }
-    .pill-1{right:-8px;top:120px}
-    .pill-2{left:26px;bottom:100px}
+    .pill-1{right:0;top:120px}
+    .pill-2{left:20px;bottom:95px}
+
+    @keyframes spinClockwise{
+      from{transform:rotate(0deg)}
+      to{transform:rotate(360deg)}
+    }
+
+    @keyframes spinCounter{
+      from{transform:rotate(360deg)}
+      to{transform:rotate(0deg)}
+    }
+
+    @keyframes corePulse{
+      0%,100%{transform:rotate(-45deg) scale(1);filter:brightness(1)}
+      50%{transform:rotate(-45deg) scale(1.08);filter:brightness(1.18)}
+    }
+
+    @keyframes coreFloat{
+      0%,100%{transform:rotate(45deg) translateY(0)}
+      50%{transform:rotate(45deg) translateY(-10px)}
+    }
+
+    @keyframes orbitPulse{
+      0%,100%{transform:scale(1);opacity:.72}
+      50%{transform:scale(1.06);opacity:1}
+    }
+
+    @keyframes sparkDrift{
+      0%,100%{transform:translateY(0) scale(1);opacity:.45}
+      50%{transform:translateY(-14px) scale(1.35);opacity:1}
+    }
 
     /* STATS */
     .stat-strip{
@@ -454,8 +619,9 @@
       .hero{padding-top:105px}
       .hero-copy h1{letter-spacing:-3px}
       .hero-visual{min-height:500px}
-      .phone.main{width:255px;right:5%}
-      .phone.back{width:190px;left:2%;top:85px}
+      .nova-orbit{width:min(500px,92vw)}
+      .nova-core-shell{width:180px}
+      .nova-core{width:82px;height:82px}
       .float-pill{font-size:10px}
       .stat-strip{grid-template-columns:repeat(2,1fr)}
       .section{padding:85px 0}
@@ -473,8 +639,9 @@
       .hero-copy h1{font-size:57px;letter-spacing:-2px}
       .hero-copy .lead{font-size:20px}
       .hero-visual{min-height:430px}
-      .phone.main{width:220px;right:3%}
-      .phone.back{width:165px;left:0;top:75px}
+      .nova-orbit{width:min(390px,94vw)}
+      .nova-core-shell{width:145px;border-radius:28px}
+      .nova-core{width:68px;height:68px}
       .pill-1{right:0;top:70px}
       .pill-2{left:0;bottom:70px}
       .stat{padding:18px}
@@ -527,9 +694,30 @@
         </div>
       </div>
 
-      <div class="hero-visual reveal">
-        <div class="phone back"><img src="assets/gameplay-dark.jpg" alt="Nova Survival gameplay"></div>
-        <div class="phone main"><img src="assets/gameplay-purple-3.jpg" alt="Nova Survival combat"></div>
+      <div class="hero-visual reveal" aria-label="Animated Nova Survival core emblem">
+        <div class="nova-orbit">
+          <div class="orbit-ring ring-c"></div>
+
+          <div class="orbit-ring ring-a">
+            <span class="ring-dot one"></span>
+            <span class="ring-dot two"></span>
+          </div>
+
+          <div class="orbit-ring ring-b">
+            <span class="ring-dot one"></span>
+            <span class="ring-dot two"></span>
+          </div>
+
+          <div class="nova-core-shell">
+            <div class="nova-core"></div>
+          </div>
+
+          <span class="energy-spark spark-1"></span>
+          <span class="energy-spark spark-2"></span>
+          <span class="energy-spark spark-3"></span>
+          <span class="energy-spark spark-4"></span>
+        </div>
+
         <div class="float-pill pill-1">⚡ BUILD YOUR RUN</div>
         <div class="float-pill pill-2">✦ CHASE A NEW HIGH SCORE</div>
       </div>
