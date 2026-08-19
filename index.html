@@ -1,11 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <link rel="icon" type="image/png" sizes="512x512" href="/assets/favicon.png">
+  <link rel="shortcut icon" href="/favicon.ico">
+  <link rel="apple-touch-icon" href="/assets/favicon.png">
+  <meta name="theme-color" content="#080611">
+
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#070712">
-
-  <title>Nova Survival | Survive. Upgrade. Dominate.</title>
+<title>Nova Survival | Survive. Upgrade. Dominate.</title>
   <meta name="description" content="Nova Survival is a fast-paced roguelite survival game. Fight relentless enemy waves, collect XP, build powerful upgrades and chase a new high score.">
   <meta property="og:title" content="Nova Survival">
   <meta property="og:description" content="Survive relentless waves. Build your power. Push for a new high score.">
@@ -270,28 +273,97 @@
 
     /* UNITS */
     .units{
-      display:grid;grid-template-columns:repeat(4,1fr);gap:18px
+      display:grid;
+      grid-template-columns:repeat(5,minmax(0,1fr));
+      gap:16px;
+      align-items:stretch;
     }
     .unit{
-      border:1px solid var(--border);
-      background:linear-gradient(145deg,var(--panel),var(--panel2));
-      border-radius:20px;padding:18px;overflow:hidden;
-      min-height:330px;
+      --enemy:#986cff;
+      position:relative;
+      border:1px solid color-mix(in srgb,var(--enemy) 42%,rgba(255,255,255,.08));
+      background:
+        radial-gradient(circle at 50% 16%,color-mix(in srgb,var(--enemy) 18%,transparent),transparent 38%),
+        linear-gradient(155deg,rgba(255,255,255,.055),rgba(255,255,255,.018));
+      border-radius:22px;
+      padding:14px 14px 18px;
+      overflow:hidden;
+      min-height:430px;
+      box-shadow:0 18px 50px rgba(0,0,0,.24);
+      transition:.28s ease;
+    }
+    .unit::before{
+      content:"";
+      position:absolute;
+      inset:-1px;
+      border-radius:22px;
+      pointer-events:none;
+      box-shadow:inset 0 0 34px color-mix(in srgb,var(--enemy) 10%,transparent);
+    }
+    .unit:hover{
+      transform:translateY(-8px);
+      border-color:color-mix(in srgb,var(--enemy) 72%,white 8%);
+      box-shadow:0 26px 70px rgba(0,0,0,.36),0 0 35px color-mix(in srgb,var(--enemy) 12%,transparent);
     }
     .unit-art{
-      aspect-ratio:1/1;border-radius:16px;overflow:hidden;
-      border:1px solid rgba(255,255,255,.1);
-      margin-bottom:18px;background:#11101b;position:relative;
+      aspect-ratio:1/1.03;
+      border-radius:17px;
+      overflow:hidden;
+      border:1px solid color-mix(in srgb,var(--enemy) 38%,rgba(255,255,255,.1));
+      margin-bottom:18px;
+      background:#0d0b16;
+      position:relative;
+      isolation:isolate;
     }
-    .unit-art img{width:100%;height:100%;object-fit:cover;transition:.35s}
-    .unit:hover .unit-art img{transform:scale(1.06)}
-    .unit h3{font-size:18px;margin-bottom:8px}
-    .unit p{color:var(--muted);line-height:1.65;font-size:13px}
+    .unit-art::after{
+      content:"";
+      position:absolute;
+      inset:0;
+      background:linear-gradient(to bottom,transparent 58%,rgba(4,4,10,.34));
+      pointer-events:none;
+    }
+    .unit-art img{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      transition:.38s ease;
+      filter:saturate(1.08) contrast(1.04);
+    }
+    .unit:hover .unit-art img{transform:scale(1.065)}
+    .unit-type{
+      color:var(--enemy);
+      font-size:10px;
+      font-weight:950;
+      letter-spacing:1.55px;
+      text-transform:uppercase;
+      margin-bottom:7px;
+    }
+    .unit h3{font-size:19px;margin-bottom:9px;letter-spacing:-.3px}
+    .unit p{color:var(--muted);line-height:1.68;font-size:13px}
+    .unit-meta{
+      display:flex;
+      flex-wrap:wrap;
+      gap:7px;
+      margin-top:14px;
+    }
     .tag{
-      display:inline-block;margin-top:12px;padding:6px 9px;border-radius:999px;
-      font-size:10px;font-weight:900;letter-spacing:.7px;
-      background:rgba(128,75,255,.12);border:1px solid rgba(151,105,255,.25);color:#b995ff;
+      display:inline-flex;
+      align-items:center;
+      gap:6px;
+      padding:6px 9px;
+      border-radius:999px;
+      font-size:9px;
+      font-weight:950;
+      letter-spacing:.65px;
+      background:color-mix(in srgb,var(--enemy) 11%,transparent);
+      border:1px solid color-mix(in srgb,var(--enemy) 34%,transparent);
+      color:color-mix(in srgb,var(--enemy) 82%,white 18%);
     }
+    .void-core{--enemy:#a05cff}
+    .blaze-mech{--enemy:#ff5549}
+    .aqua-drone{--enemy:#3edcff}
+    .nova-guard{--enemy:#78ef58}
+    .elite-mech{--enemy:#ffbd38}
 
     /* GALLERY */
     .gallery{
@@ -347,6 +419,10 @@
     .reveal.show{opacity:1;transform:none}
 
     /* MOBILE */
+    @media(max-width:1180px){
+      .units{grid-template-columns:repeat(3,1fr)}
+    }
+
     @media(max-width:980px){
       .hero-grid,.show-row,.show-row.reverse{grid-template-columns:1fr}
       .hero-copy{text-align:center}
@@ -578,36 +654,98 @@
   <section class="section" id="enemies">
     <div class="container">
       <div class="section-head reveal">
-        <div class="eyebrow">BATTLEFIELD UNITS</div>
-        <h2>Recognize the threat before it reaches you.</h2>
-        <p>These visuals are cropped directly from the gameplay you supplied, so the page uses the real in-game look instead of fake website-only mascots.</p>
+        <div class="eyebrow">ENEMY DATABASE</div>
+        <h2>Learn the threat before it reaches you.</h2>
+        <p>
+          Nova Survival's enemies do not all pressure you in the same way.
+          Some chase, some attack from range, some dive straight into you, and some turn one mistake into a heavy hit.
+          Learn their patterns and shape your build around the wave in front of you.
+        </p>
       </div>
 
       <div class="units">
-        <article class="unit reveal">
-          <div class="unit-art"><img src="assets/player-core.jpg" alt="Nova Survival player core"></div>
-          <h3>Nova Core</h3>
-          <p>The center of the run. Your movement, build choices and surrounding support all revolve around keeping this core alive.</p>
-          <span class="tag">PLAYER</span>
+
+        <article class="unit void-core reveal">
+          <div class="unit-art">
+            <img src="assets/enemy-void-core.jpg" alt="Void Core enemy from Nova Survival">
+          </div>
+          <div class="unit-type">RANGED ENEMY</div>
+          <h3>Void Core</h3>
+          <p>
+            A purple ranged enemy that keeps its distance and fires energy projectiles at you.
+            It creates pressure from outside the main swarm, so standing still for too long is a bad idea.
+          </p>
+          <div class="unit-meta">
+            <span class="tag">RANGED FIRE</span>
+            <span class="tag">POSITIONING</span>
+          </div>
         </article>
-        <article class="unit reveal">
-          <div class="unit-art"><img src="assets/support-drone.jpg" alt="Nova Survival support drone"></div>
-          <h3>Support Drone</h3>
-          <p>Bright cyan support units orbit close to the player and make a late-run build feel like a moving formation instead of a lone target.</p>
-          <span class="tag">SUPPORT</span>
+
+        <article class="unit blaze-mech reveal">
+          <div class="unit-art">
+            <img src="assets/enemy-blaze-mech.jpg" alt="Blaze Mech enemy from Nova Survival">
+          </div>
+          <div class="unit-type">STANDARD ENEMY</div>
+          <h3>Blaze Mech</h3>
+          <p>
+            The red frontline mech relentlessly chases the player and deals damage on contact.
+            Simple behavior, constant pressure. Let too many surround you and the battlefield closes fast.
+          </p>
+          <div class="unit-meta">
+            <span class="tag">CHASE</span>
+            <span class="tag">CONTACT DAMAGE</span>
+          </div>
         </article>
-        <article class="unit reveal">
-          <div class="unit-art"><img src="assets/purple-enemy.jpg" alt="Nova Survival purple enemy"></div>
-          <h3>Ranged Threat</h3>
-          <p>Purple ranged enemies add pressure from outside the immediate swarm and punish careless positioning.</p>
-          <span class="tag">RANGED</span>
+
+        <article class="unit aqua-drone reveal">
+          <div class="unit-art">
+            <img src="assets/enemy-aqua-drone.jpg" alt="Aqua Drone enemy from Nova Survival">
+          </div>
+          <div class="unit-type">HIGH-SPEED ENEMY</div>
+          <h3>Aqua Drone</h3>
+          <p>
+            A fast flying attacker that rushes directly at you and tries to slam into the player.
+            Its speed makes it dangerous, but a well-positioned drone build can remove it quickly.
+          </p>
+          <div class="unit-meta">
+            <span class="tag">FAST DIVE</span>
+            <span class="tag">DRONE COUNTER</span>
+          </div>
         </article>
-        <article class="unit reveal">
-          <div class="unit-art"><img src="assets/red-enemy.jpg" alt="Nova Survival red enemy"></div>
-          <h3>Wave Enemy</h3>
-          <p>Red enemies form the visible frontline of the wave and help turn open space into a route-planning problem.</p>
-          <span class="tag">WAVE</span>
+
+        <article class="unit nova-guard reveal">
+          <div class="unit-art">
+            <img src="assets/enemy-nova-guard.jpg" alt="Nova Guard enemy from Nova Survival">
+          </div>
+          <div class="unit-type">EXPLOSIVE ENEMY</div>
+          <h3>Nova Guard</h3>
+          <p>
+            A green explosive unit that suddenly lunges toward you and detonates at close range.
+            Its explosion deals heavy damage, making reaction time and spacing especially important.
+          </p>
+          <div class="unit-meta">
+            <span class="tag">LUNGE</span>
+            <span class="tag">HIGH EXPLOSIVE DAMAGE</span>
+          </div>
         </article>
+
+        <article class="unit elite-mech reveal">
+          <div class="unit-art">
+            <img src="assets/enemy-elite-mech.jpg" alt="Elite Mech boss from Nova Survival">
+          </div>
+          <div class="unit-type">BOSS ENEMY</div>
+          <h3>Elite Mech</h3>
+          <p>
+            A high-health boss with dangerous contact damage and a three-projectile ranged attack.
+            Taking it down demands more focus, but it rewards the risk by dropping significantly more XP.
+          </p>
+          <div class="unit-meta">
+            <span class="tag">BOSS</span>
+            <span class="tag">3-SHOT ATTACK</span>
+            <span class="tag">BONUS XP</span>
+          </div>
+        </article>
+
       </div>
     </div>
   </section>
@@ -660,7 +798,6 @@
     <div class="footer-links">
       <a href="https://sites.google.com/view/novasurvivalprivacypolicy/ana-sayfa" target="_blank" rel="noopener noreferrer">Privacy Policy</a>
       <a href="mailto:novasurvivalgame@gmail.com">Contact</a>
-      <a href="/app-ads.txt">app-ads.txt</a>
       <a href="https://www.instagram.com/novasurvivalgame/" target="_blank" rel="noopener noreferrer">Instagram</a>
       <a href="https://www.tiktok.com/@novasurvivalgame?lang=" target="_blank" rel="noopener noreferrer">TikTok</a>
       <a href="https://www.youtube.com/@NovaSurvivalGame" target="_blank" rel="noopener noreferrer">YouTube</a>
