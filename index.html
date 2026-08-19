@@ -3,1670 +3,694 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#070712">
 
-  <title>Nova Survival</title>
-
-  <meta
-    name="description"
-    content="Nova Survival - Survive relentless enemy waves, collect XP, build powerful upgrades and push for a new high score."
-  >
+  <title>Nova Survival | Survive. Upgrade. Dominate.</title>
+  <meta name="description" content="Nova Survival is a fast-paced roguelite survival game. Fight relentless enemy waves, collect XP, build powerful upgrades and chase a new high score.">
+  <meta property="og:title" content="Nova Survival">
+  <meta property="og:description" content="Survive relentless waves. Build your power. Push for a new high score.">
+  <meta property="og:type" content="website">
 
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
+    :root{
+      --bg:#06060b;
+      --bg2:#0a0813;
+      --panel:rgba(255,255,255,.055);
+      --panel2:rgba(255,255,255,.025);
+      --border:rgba(255,255,255,.095);
+      --muted:#9c9cad;
+      --text:#f8f8fb;
+      --purple:#9b6cff;
+      --purple2:#6f43ff;
+      --blue:#4a9cff;
+      --cyan:#2fd5ff;
+      --pink:#ef3d7b;
+      --red:#ff5d5d;
+      --green:#6deb79;
+      --nav:rgba(5,5,10,.78);
+      --shadow:0 24px 80px rgba(0,0,0,.45);
     }
 
-    html {
-      scroll-behavior: smooth;
-    }
-
-    body {
-      font-family: Arial, Helvetica, sans-serif;
+    *{box-sizing:border-box;margin:0;padding:0}
+    html{scroll-behavior:smooth}
+    body{
+      font-family:Inter,ui-sans-serif,-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;
+      color:var(--text);
       background:
-        radial-gradient(circle at 50% 10%, rgba(120, 50, 255, 0.22), transparent 33%),
-        radial-gradient(circle at 15% 40%, rgba(0, 140, 255, 0.10), transparent 28%),
-        radial-gradient(circle at 85% 55%, rgba(174, 60, 255, 0.10), transparent 30%),
-        #05050a;
-      color: white;
-      min-height: 100vh;
-      overflow-x: hidden;
+        radial-gradient(circle at 15% 10%, rgba(132,71,255,.18), transparent 26%),
+        radial-gradient(circle at 80% 24%, rgba(42,138,255,.10), transparent 25%),
+        linear-gradient(180deg,#050509 0%,#080711 45%,#05050a 100%);
+      min-height:100vh;
+      overflow-x:hidden;
     }
 
-    body::before {
-      content: "";
-      position: fixed;
-      inset: 0;
-      pointer-events: none;
-      opacity: 0.22;
-
+    body::before{
+      content:"";
+      position:fixed;inset:0;
+      pointer-events:none;
+      z-index:-4;
       background-image:
-        linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
-
-      background-size: 60px 60px;
-
-      mask-image:
-        linear-gradient(to bottom, black, transparent 80%);
-
-      z-index: -5;
+        linear-gradient(rgba(255,255,255,.022) 1px, transparent 1px),
+        linear-gradient(90deg,rgba(255,255,255,.022) 1px, transparent 1px);
+      background-size:56px 56px;
+      mask-image:linear-gradient(to bottom,black,transparent 75%);
     }
 
+    a{color:inherit}
+    img{display:block;max-width:100%}
+    .container{width:min(1180px,calc(100% - 40px));margin:auto}
+    .eyebrow{
+      color:#a982ff;
+      letter-spacing:4px;
+      text-transform:uppercase;
+      font-size:12px;
+      font-weight:900;
+    }
 
-    /* ================================
-       NAVBAR
-    ================================= */
+    /* NAV */
+    nav{
+      position:fixed;top:0;left:0;right:0;
+      z-index:1000;
+      height:74px;
+      display:flex;align-items:center;
+      background:var(--nav);
+      border-bottom:1px solid rgba(255,255,255,.07);
+      backdrop-filter:blur(16px);
+    }
+    .nav-inner{
+      width:min(1280px,calc(100% - 40px));margin:auto;
+      display:flex;align-items:center;justify-content:space-between;
+    }
+    .logo{
+      font-size:20px;font-weight:950;letter-spacing:1.8px;text-decoration:none
+    }
+    .logo span{color:var(--purple)}
+    .nav-links{display:flex;gap:26px;align-items:center}
+    .nav-links a{
+      text-decoration:none;color:#c6c6d3;
+      font-size:12px;font-weight:800;letter-spacing:.8px;
+      transition:.2s;
+    }
+    .nav-links a:hover{color:white}
+    .nav-play{
+      padding:10px 14px;border-radius:10px;
+      background:linear-gradient(135deg,var(--purple2),#376cff);
+      color:#fff !important;box-shadow:0 0 28px rgba(103,64,255,.22);
+    }
+    .menu-btn{
+      display:none;background:none;border:0;color:white;font-size:27px;cursor:pointer;
+    }
 
-    nav {
-      width: 100%;
-      height: 74px;
+    /* HERO */
+    .hero{
+      min-height:100vh;
+      padding:130px 0 80px;
+      display:grid;
+      place-items:center;
+      position:relative;
+      isolation:isolate;
+    }
+    .hero::after{
+      content:"";
+      position:absolute;inset:auto 50% 8% auto;
+      transform:translateX(50%);
+      width:680px;height:680px;border-radius:50%;
+      background:rgba(119,62,255,.13);filter:blur(115px);z-index:-2;
+    }
+    .hero-grid{
+      display:grid;
+      grid-template-columns:1.05fr .95fr;
+      gap:60px;align-items:center;
+    }
+    .hero-copy h1{
+      font-size:clamp(58px,8.2vw,112px);
+      line-height:.88;letter-spacing:-5px;font-weight:950;
+      margin:20px 0 24px;
+      text-shadow:0 0 42px rgba(135,78,255,.22);
+    }
+    .gradient-text{
+      background:linear-gradient(90deg,#fff 10%,#ad7eff 52%,#69b2ff);
+      -webkit-background-clip:text;background-clip:text;color:transparent;
+    }
+    .hero-copy .lead{
+      font-size:clamp(19px,2.4vw,29px);
+      font-weight:850;margin-bottom:18px;
+    }
+    .hero-copy .desc{
+      max-width:650px;color:var(--muted);
+      line-height:1.8;font-size:16px;
+    }
+    .buttons{display:flex;gap:13px;flex-wrap:wrap;margin-top:32px}
+    .button{
+      text-decoration:none;border-radius:13px;padding:15px 22px;
+      font-weight:900;font-size:13px;letter-spacing:.35px;
+      display:inline-flex;align-items:center;justify-content:center;
+      transition:.22s;border:1px solid transparent;
+    }
+    .button.primary{
+      background:linear-gradient(135deg,#7b43ff,#356dff);
+      box-shadow:0 0 34px rgba(105,61,255,.28)
+    }
+    .button.primary:hover{transform:translateY(-3px);box-shadow:0 0 50px rgba(105,61,255,.45)}
+    .button.secondary{background:rgba(255,255,255,.04);border-color:var(--border);color:#ddddea}
+    .button.secondary:hover{transform:translateY(-3px);background:rgba(255,255,255,.08)}
 
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
+    .hero-visual{
+      min-height:660px;position:relative;
+    }
+    .phone{
+      position:absolute;border-radius:30px;overflow:hidden;
+      border:1px solid rgba(255,255,255,.16);
+      box-shadow:var(--shadow),0 0 65px rgba(114,58,255,.15);
+      background:#0b0914;
+    }
+    .phone img{width:100%;height:100%;object-fit:cover}
+    .phone.main{
+      width:330px;aspect-ratio:1080/2237;
+      right:8%;top:0;transform:rotate(3deg);
+      z-index:3;
+    }
+    .phone.back{
+      width:250px;aspect-ratio:1080/2190;
+      left:0;top:90px;transform:rotate(-7deg);
+      opacity:.72;filter:saturate(.9) brightness(.8);
+      z-index:1;
+    }
+    .float-pill{
+      position:absolute;z-index:5;
+      padding:11px 14px;border-radius:999px;
+      background:rgba(17,14,31,.82);
+      border:1px solid rgba(255,255,255,.12);
+      backdrop-filter:blur(12px);
+      font-size:12px;font-weight:850;letter-spacing:.3px;
+      box-shadow:0 12px 30px rgba(0,0,0,.35);
+    }
+    .pill-1{right:-8px;top:120px}
+    .pill-2{left:26px;bottom:100px}
 
-      padding: 0 7%;
+    /* STATS */
+    .stat-strip{
+      margin-top:-18px;
+      display:grid;grid-template-columns:repeat(4,1fr);
+      gap:12px;
+    }
+    .stat{
+      padding:22px;border:1px solid var(--border);
+      background:linear-gradient(145deg,var(--panel),var(--panel2));
+      border-radius:18px;
+    }
+    .stat strong{display:block;font-size:25px;margin-bottom:5px}
+    .stat span{color:var(--muted);font-size:12px}
 
-      border-bottom:
-        1px solid rgba(255,255,255,0.08);
+    /* SECTIONS */
+    .section{padding:120px 0}
+    .section-head{text-align:center;max-width:760px;margin:0 auto 56px}
+    .section-head h2{font-size:clamp(35px,5vw,56px);margin:14px 0 16px;letter-spacing:-2px}
+    .section-head p{color:var(--muted);line-height:1.8}
 
+    .feature-grid{
+      display:grid;grid-template-columns:repeat(3,1fr);gap:18px
+    }
+    .feature-card{
+      min-height:230px;padding:28px;border-radius:20px;
+      background:linear-gradient(145deg,var(--panel),var(--panel2));
+      border:1px solid var(--border);position:relative;overflow:hidden;
+      transition:.25s;
+    }
+    .feature-card:hover{transform:translateY(-6px);border-color:rgba(146,92,255,.45)}
+    .feature-card::after{
+      content:"";position:absolute;width:130px;height:130px;right:-45px;bottom:-45px;
+      background:rgba(119,62,255,.1);filter:blur(24px);border-radius:50%
+    }
+    .feature-card .num{color:#9f74ff;font-size:12px;font-weight:900;letter-spacing:2px}
+    .feature-card h3{font-size:21px;margin:22px 0 10px}
+    .feature-card p{color:var(--muted);line-height:1.7;font-size:14px}
+
+    /* SHOWCASE */
+    .showcase{
+      display:grid;gap:90px;
+    }
+    .show-row{
+      display:grid;grid-template-columns:.9fr 1.1fr;
+      gap:70px;align-items:center;
+    }
+    .show-row.reverse{grid-template-columns:1.1fr .9fr}
+    .show-row.reverse .shot-wrap{order:2}
+    .shot-wrap{position:relative;min-height:640px;display:grid;place-items:center}
+    .shot-card{
+      width:min(390px,82vw);
+      aspect-ratio:1080/2237;
+      border-radius:30px;overflow:hidden;
+      border:1px solid rgba(255,255,255,.14);
+      box-shadow:0 30px 85px rgba(0,0,0,.48),0 0 65px rgba(116,61,255,.15);
+      transform:rotate(-2deg);position:relative;z-index:2;background:#0b0914;
+    }
+    .reverse .shot-card{transform:rotate(2deg)}
+    .shot-card img{width:100%;height:100%;object-fit:cover}
+    .shot-glow{
+      position:absolute;width:420px;height:420px;border-radius:50%;
+      background:rgba(121,66,255,.16);filter:blur(70px)
+    }
+    .copy h3{font-size:clamp(34px,4.3vw,54px);letter-spacing:-1.7px;margin:14px 0 18px}
+    .copy p{color:var(--muted);line-height:1.85;max-width:600px}
+    .bullet-list{display:grid;gap:12px;margin-top:24px}
+    .bullet{
+      display:flex;gap:12px;align-items:flex-start;
+      padding:12px 14px;border:1px solid rgba(255,255,255,.075);
+      border-radius:13px;background:rgba(255,255,255,.025)
+    }
+    .bullet b{font-size:14px}
+    .bullet span{color:#9c9cad;font-size:13px;line-height:1.5}
+    .dot{
+      width:9px;height:9px;border-radius:50%;
+      background:linear-gradient(135deg,var(--cyan),var(--purple));
+      margin-top:5px;box-shadow:0 0 15px rgba(88,156,255,.55);
+      flex:0 0 auto;
+    }
+
+    /* UNITS */
+    .units{
+      display:grid;grid-template-columns:repeat(4,1fr);gap:18px
+    }
+    .unit{
+      border:1px solid var(--border);
+      background:linear-gradient(145deg,var(--panel),var(--panel2));
+      border-radius:20px;padding:18px;overflow:hidden;
+      min-height:330px;
+    }
+    .unit-art{
+      aspect-ratio:1/1;border-radius:16px;overflow:hidden;
+      border:1px solid rgba(255,255,255,.1);
+      margin-bottom:18px;background:#11101b;position:relative;
+    }
+    .unit-art img{width:100%;height:100%;object-fit:cover;transition:.35s}
+    .unit:hover .unit-art img{transform:scale(1.06)}
+    .unit h3{font-size:18px;margin-bottom:8px}
+    .unit p{color:var(--muted);line-height:1.65;font-size:13px}
+    .tag{
+      display:inline-block;margin-top:12px;padding:6px 9px;border-radius:999px;
+      font-size:10px;font-weight:900;letter-spacing:.7px;
+      background:rgba(128,75,255,.12);border:1px solid rgba(151,105,255,.25);color:#b995ff;
+    }
+
+    /* GALLERY */
+    .gallery{
+      display:grid;grid-template-columns:repeat(4,1fr);gap:15px;
+      align-items:start;
+    }
+    .gallery figure{
+      border-radius:18px;overflow:hidden;border:1px solid var(--border);
+      background:#0d0b16;box-shadow:0 18px 45px rgba(0,0,0,.28);
+      transition:.25s;
+    }
+    .gallery figure:nth-child(2),.gallery figure:nth-child(4){margin-top:34px}
+    .gallery figure:hover{transform:translateY(-6px)}
+    .gallery img{width:100%;height:auto}
+
+    /* SOCIAL */
+    .social-wrap{
+      padding:50px;border-radius:28px;border:1px solid var(--border);
       background:
-        rgba(5,5,10,0.76);
+        radial-gradient(circle at 50% 0%,rgba(119,61,255,.18),transparent 52%),
+        rgba(255,255,255,.025);
+      text-align:center;
+    }
+    .social-wrap h2{font-size:clamp(34px,5vw,54px);margin:12px 0 15px}
+    .social-wrap p{color:var(--muted)}
+    .social-links{display:flex;justify-content:center;gap:14px;flex-wrap:wrap;margin-top:28px}
+    .social{
+      min-width:150px;padding:15px 18px;border-radius:14px;
+      text-decoration:none;border:1px solid var(--border);
+      background:rgba(255,255,255,.035);font-weight:850;font-size:13px;transition:.22s;
+    }
+    .social:hover{transform:translateY(-3px);background:rgba(255,255,255,.07)}
 
-      backdrop-filter:
-        blur(15px);
+    .cta{
+      margin:0 auto 100px;padding:80px 25px;
+      text-align:center;border-radius:28px;border:1px solid var(--border);
+      background:radial-gradient(circle at center,rgba(104,56,255,.18),transparent 60%),rgba(255,255,255,.025);
+    }
+    .cta h2{font-size:clamp(36px,5vw,56px);margin-bottom:14px}
+    .cta p{color:var(--muted);margin-bottom:28px}
 
-      position: fixed;
-      top: 0;
-      z-index: 1000;
+    footer{
+      border-top:1px solid rgba(255,255,255,.07);
+      padding:35px 0;color:#707080;font-size:13px
+    }
+    .footer-inner{display:flex;justify-content:space-between;align-items:center;gap:20px}
+    .footer-links{display:flex;gap:18px;flex-wrap:wrap}
+    footer a{text-decoration:none;color:#9d9dac}
+    footer a:hover{color:#fff}
+
+    /* REVEAL */
+    .reveal{opacity:0;transform:translateY(30px);transition:.7s ease}
+    .reveal.show{opacity:1;transform:none}
+
+    /* MOBILE */
+    @media(max-width:980px){
+      .hero-grid,.show-row,.show-row.reverse{grid-template-columns:1fr}
+      .hero-copy{text-align:center}
+      .hero-copy .desc{margin:auto}
+      .buttons{justify-content:center}
+      .hero-visual{min-height:610px;max-width:620px;width:100%;margin:auto}
+      .show-row.reverse .shot-wrap{order:0}
+      .copy{text-align:center}
+      .bullet-list{text-align:left}
+      .feature-grid{grid-template-columns:repeat(2,1fr)}
+      .units{grid-template-columns:repeat(2,1fr)}
+      .gallery{grid-template-columns:repeat(2,1fr)}
+      .gallery figure:nth-child(2),.gallery figure:nth-child(4){margin-top:0}
     }
 
-    .logo {
-      font-size: 20px;
-      font-weight: 900;
-      letter-spacing: 2px;
-    }
-
-    .logo span {
-      color: #9c66ff;
-    }
-
-    .nav-links {
-      display: flex;
-      align-items: center;
-    }
-
-    .nav-links a {
-      color: #bebec9;
-      text-decoration: none;
-      margin-left: 30px;
-
-      font-size: 13px;
-      font-weight: 700;
-      letter-spacing: 0.7px;
-
-      transition: 0.2s;
-    }
-
-    .nav-links a:hover {
-      color: white;
-    }
-
-
-    /* ================================
-       HERO
-    ================================= */
-
-    .hero {
-      min-height: 100vh;
-
-      display: flex;
-      align-items: center;
-      justify-content: center;
-
-      text-align: center;
-
-      padding:
-        130px 20px
-        80px;
-
-      position: relative;
-      isolation: isolate;
-    }
-
-    .hero-glow {
-      position: absolute;
-
-      width: 600px;
-      height: 600px;
-
-      background:
-        rgba(108, 51, 255, 0.16);
-
-      filter:
-        blur(110px);
-
-      border-radius:
-        50%;
-
-      z-index: -4;
-    }
-
-    .hero-content {
-      max-width: 900px;
-      z-index: 10;
-    }
-
-    .mini-title {
-      color: #9e70ff;
-
-      font-size: 12px;
-      font-weight: 800;
-
-      letter-spacing: 5px;
-
-      margin-bottom: 24px;
-    }
-
-    h1 {
-      font-size:
-        clamp(56px, 9vw, 108px);
-
-      line-height: 0.9;
-
-      font-weight: 950;
-
-      letter-spacing: -5px;
-
-      text-shadow:
-        0 0 30px
-        rgba(132, 76, 255, 0.30),
-
-        0 0 80px
-        rgba(58, 137, 255, 0.14);
-    }
-
-    .gradient-text {
-      background:
-        linear-gradient(
-          90deg,
-          #ffffff,
-          #ae7aff,
-          #64aaff
-        );
-
-      -webkit-background-clip:
-        text;
-
-      -webkit-text-fill-color:
-        transparent;
-    }
-
-    .tagline {
-      margin-top: 26px;
-
-      font-size:
-        clamp(20px, 3vw, 30px);
-
-      font-weight: 800;
-
-      color:
-        #e2e2ec;
-    }
-
-    .description {
-      max-width: 650px;
-
-      margin:
-        22px auto 0;
-
-      color:
-        #9898a9;
-
-      font-size:
-        16px;
-
-      line-height:
-        1.8;
-    }
-
-    .buttons {
-      margin-top:
-        38px;
-
-      display:
-        flex;
-
-      justify-content:
-        center;
-
-      gap:
-        14px;
-
-      flex-wrap:
-        wrap;
-    }
-
-    .button {
-      display:
-        inline-flex;
-
-      align-items:
-        center;
-
-      justify-content:
-        center;
-
-      padding:
-        16px 27px;
-
-      border-radius:
-        12px;
-
-      text-decoration:
-        none;
-
-      font-weight:
-        800;
-
-      font-size:
-        13px;
-
-      letter-spacing:
-        0.4px;
-
-      transition:
-        0.25s;
-    }
-
-    .primary {
-      color:
-        white;
-
-      background:
-        linear-gradient(
-          135deg,
-          #7742ff,
-          #326dff
-        );
-
-      box-shadow:
-        0 0 30px
-        rgba(104, 60, 255, 0.30);
-    }
-
-    .primary:hover {
-      transform:
-        translateY(-3px);
-
-      box-shadow:
-        0 0 50px
-        rgba(104, 60, 255, 0.52);
-    }
-
-    .secondary {
-      color:
-        #dfdfe8;
-
-      border:
-        1px solid
-        rgba(255,255,255,0.15);
-
-      background:
-        rgba(255,255,255,0.04);
-    }
-
-    .secondary:hover {
-      background:
-        rgba(255,255,255,0.08);
-
-      transform:
-        translateY(-3px);
-    }
-
-
-    /* ================================
-       LEFT ENERGY DRONE
-    ================================= */
-
-    .drone-wrap {
-      position: absolute;
-
-      left: 4%;
-      top: 54%;
-
-      transform:
-        translateY(-50%);
-
-      width:
-        220px;
-
-      height:
-        300px;
-
-      z-index:
-        2;
-
-      filter:
-        drop-shadow(
-          0 0 30px
-          rgba(73, 149, 255, 0.23)
-        );
-    }
-
-    .drone {
-      position: absolute;
-
-      left: 50%;
-      top: 50%;
-
-      transform:
-        translate(-50%, -50%);
-
-      width:
-        120px;
-
-      height:
-        120px;
-
-      border-radius:
-        28%;
-
-      border:
-        2px solid
-        rgba(127, 188, 255, 0.55);
-
-      background:
-        linear-gradient(
-          145deg,
-          #1b2032,
-          #090b13
-        );
-
-      box-shadow:
-        inset 0 0 28px
-        rgba(79, 145, 255, 0.12),
-
-        0 0 40px
-        rgba(59, 122, 255, 0.18);
-
-      animation:
-        floatDrone
-        4s
-        ease-in-out
-        infinite;
-    }
-
-    .drone::before,
-    .drone::after {
-      content: "";
-
-      position: absolute;
-
-      top:
-        42px;
-
-      width:
-        72px;
-
-      height:
-        25px;
-
-      border:
-        2px solid
-        rgba(133, 186, 255, 0.42);
-
-      background:
-        linear-gradient(
-          90deg,
-          rgba(42, 70, 110, 0.5),
-          rgba(13, 18, 30, 0.9)
-        );
-
-      z-index:
-        -1;
-    }
-
-    .drone::before {
-      left:
-        -66px;
-
-      transform:
-        rotate(-13deg);
-
-      border-radius:
-        14px 0 0 14px;
-    }
-
-    .drone::after {
-      right:
-        -66px;
-
-      transform:
-        rotate(13deg);
-
-      border-radius:
-        0 14px 14px 0;
-    }
-
-    .drone-core {
-      position:
-        absolute;
-
-      left:
-        50%;
-
-      top:
-        50%;
-
-      transform:
-        translate(-50%, -50%);
-
-      width:
-        52px;
-
-      height:
-        52px;
-
-      border-radius:
-        50%;
-
-      border:
-        3px solid
-        rgba(138, 205, 255, 0.85);
-
-      background:
-        radial-gradient(
-          circle,
-          #d7f3ff 0%,
-          #4ca8ff 18%,
-          #2269ff 40%,
-          #10265f 62%,
-          #050912 72%
-        );
-
-      box-shadow:
-        0 0 12px #6cc4ff,
-        0 0 32px #347cff,
-        0 0 65px rgba(55, 105, 255, 0.6);
-
-      animation:
-        corePulse
-        2.3s
-        ease-in-out
-        infinite;
-    }
-
-    .drone-ring {
-      position:
-        absolute;
-
-      inset:
-        -22px;
-
-      border:
-        1px solid
-        rgba(92, 158, 255, 0.25);
-
-      border-radius:
-        50%;
-
-      animation:
-        rotateRing
-        8s
-        linear
-        infinite;
-    }
-
-    .drone-ring::before,
-    .drone-ring::after {
-      content: "";
-
-      position:
-        absolute;
-
-      width:
-        7px;
-
-      height:
-        7px;
-
-      background:
-        #79c8ff;
-
-      border-radius:
-        50%;
-
-      box-shadow:
-        0 0 12px #52a9ff;
-    }
-
-    .drone-ring::before {
-      top:
-        7px;
-
-      left:
-        19px;
-    }
-
-    .drone-ring::after {
-      bottom:
-        7px;
-
-      right:
-        19px;
-    }
-
-
-    /* ================================
-       RIGHT SHADOW ARMOR
-    ================================= */
-
-    .armor-wrap {
-      position:
-        absolute;
-
-      right:
-        2.5%;
-
-      bottom:
-        5%;
-
-      width:
-        260px;
-
-      height:
-        480px;
-
-      z-index:
-        2;
-
-      opacity:
-        0.92;
-    }
-
-    .armor-glow {
-      position:
-        absolute;
-
-      width:
-        210px;
-
-      height:
-        320px;
-
-      left:
-        25px;
-
-      top:
-        80px;
-
-      border-radius:
-        50%;
-
-      background:
-        rgba(125, 50, 255, 0.14);
-
-      filter:
-        blur(60px);
-
-      z-index:
-        -1;
-    }
-
-    .armor-head {
-      position:
-        absolute;
-
-      top:
-        45px;
-
-      left:
-        88px;
-
-      width:
-        85px;
-
-      height:
-        95px;
-
-      background:
-        linear-gradient(
-          145deg,
-          #20202c,
-          #09090f
-        );
-
-      clip-path:
-        polygon(
-          20% 5%,
-          80% 5%,
-          100% 28%,
-          87% 88%,
-          50% 100%,
-          13% 88%,
-          0 28%
-        );
-
-      border-radius:
-        15px;
-
-      box-shadow:
-        0 0 30px
-        rgba(137, 62, 255, 0.20);
-    }
-
-    .visor {
-      position:
-        absolute;
-
-      left:
-        15px;
-
-      top:
-        39px;
-
-      width:
-        55px;
-
-      height:
-        10px;
-
-      border-radius:
-        50px;
-
-      background:
-        linear-gradient(
-          90deg,
-          #4420ff,
-          #c76eff,
-          #532eff
-        );
-
-      box-shadow:
-        0 0 10px #a550ff,
-        0 0 24px rgba(145, 55, 255, 0.75);
-    }
-
-    .armor-body {
-      position:
-        absolute;
-
-      top:
-        125px;
-
-      left:
-        50px;
-
-      width:
-        160px;
-
-      height:
-        210px;
-
-      background:
-        linear-gradient(
-          145deg,
-          #20202b,
-          #0a0a10 70%
-        );
-
-      clip-path:
-        polygon(
-          20% 0,
-          80% 0,
-          100% 25%,
-          82% 100%,
-          18% 100%,
-          0 25%
-        );
-
-      box-shadow:
-        inset 0 0 35px
-        rgba(133, 53, 255, 0.10);
-    }
-
-    .armor-core {
-      position:
-        absolute;
-
-      left:
-        55px;
-
-      top:
-        55px;
-
-      width:
-        50px;
-
-      height:
-        50px;
-
-      border-radius:
-        50%;
-
-      border:
-        2px solid
-        #925cff;
-
-      background:
-        radial-gradient(
-          circle,
-          #e7c7ff,
-          #9a4cff 22%,
-          #411d8f 45%,
-          #090512 68%
-        );
-
-      box-shadow:
-        0 0 18px #a45dff,
-        0 0 45px rgba(139, 48, 255, 0.45);
-    }
-
-    .armor-line {
-      position:
-        absolute;
-
-      height:
-        3px;
-
-      background:
-        linear-gradient(
-          90deg,
-          transparent,
-          #9857ff,
-          transparent
-        );
-
-      box-shadow:
-        0 0 9px
-        rgba(155, 81, 255, 0.8);
-    }
-
-    .line-one {
-      width:
-        90px;
-
-      left:
-        35px;
-
-      top:
-        128px;
-
-      transform:
-        rotate(18deg);
-    }
-
-    .line-two {
-      width:
-        90px;
-
-      right:
-        35px;
-
-      top:
-        128px;
-
-      transform:
-        rotate(-18deg);
-    }
-
-    .armor-leg {
-      position:
-        absolute;
-
-      top:
-        315px;
-
-      width:
-        60px;
-
-      height:
-        125px;
-
-      background:
-        linear-gradient(
-          180deg,
-          #171720,
-          #08080d
-        );
-
-      border-bottom:
-        2px solid
-        rgba(154, 82, 255, 0.4);
-    }
-
-    .leg-left {
-      left:
-        65px;
-
-      transform:
-        skew(-4deg);
-    }
-
-    .leg-right {
-      right:
-        65px;
-
-      transform:
-        skew(4deg);
-    }
-
-
-    /* ================================
-       FEATURES
-    ================================= */
-
-    .features {
-      max-width:
-        1120px;
-
-      margin:
-        auto;
-
-      padding:
-        110px 25px 130px;
-    }
-
-    .section-title {
-      text-align:
-        center;
-
-      margin-bottom:
-        55px;
-    }
-
-    .section-title p {
-      color:
-        #9263ff;
-
-      font-weight:
-        800;
-
-      letter-spacing:
-        4px;
-
-      font-size:
-        12px;
-
-      margin-bottom:
-        12px;
-    }
-
-    .section-title h2 {
-      font-size:
-        clamp(32px, 5vw, 48px);
-    }
-
-    .cards {
-      display:
-        grid;
-
-      grid-template-columns:
-        repeat(3, 1fr);
-
-      gap:
-        18px;
-    }
-
-    .card {
-      min-height:
-        215px;
-
-      padding:
-        30px;
-
-      border-radius:
-        18px;
-
-      background:
-        linear-gradient(
-          145deg,
-          rgba(255,255,255,0.055),
-          rgba(255,255,255,0.018)
-        );
-
-      border:
-        1px solid
-        rgba(255,255,255,0.09);
-
-      transition:
-        0.25s;
-
-      position:
-        relative;
-
-      overflow:
-        hidden;
-    }
-
-    .card::after {
-      content: "";
-
-      position:
-        absolute;
-
-      width:
-        110px;
-
-      height:
-        110px;
-
-      right:
-        -40px;
-
-      bottom:
-        -40px;
-
-      border-radius:
-        50%;
-
-      background:
-        rgba(115, 65, 255, 0.08);
-
-      filter:
-        blur(20px);
-    }
-
-    .card:hover {
-      transform:
-        translateY(-6px);
-
-      border-color:
-        rgba(146, 92, 255, 0.45);
-
-      box-shadow:
-        0 15px 45px
-        rgba(0,0,0,0.35);
-    }
-
-    .number {
-      color:
-        #9667ff;
-
-      font-size:
-        13px;
-
-      font-weight:
-        800;
-
-      margin-bottom:
-        22px;
-    }
-
-    .card h3 {
-      margin-bottom:
-        12px;
-
-      font-size:
-        20px;
-    }
-
-    .card p {
-      color:
-        #9696a5;
-
-      font-size:
-        14px;
-
-      line-height:
-        1.7;
-    }
-
-
-    /* ================================
-       CTA
-    ================================= */
-
-    .cta {
-      max-width:
-        1050px;
-
-      margin:
-        0 auto 100px;
-
-      padding:
-        80px 25px;
-
-      text-align:
-        center;
-
-      border-radius:
-        25px;
-
-      border:
-        1px solid
-        rgba(255,255,255,0.08);
-
-      background:
-        radial-gradient(
-          circle at center,
-          rgba(104, 56, 255, 0.18),
-          transparent 60%
-        ),
-        rgba(255,255,255,0.025);
-
-      position:
-        relative;
-
-      overflow:
-        hidden;
-    }
-
-    .cta::before {
-      content: "";
-
-      position:
-        absolute;
-
-      width:
-        300px;
-
-      height:
-        300px;
-
-      left:
-        -150px;
-
-      top:
-        -150px;
-
-      border:
-        1px solid
-        rgba(123, 81, 255, 0.12);
-
-      border-radius:
-        50%;
-    }
-
-    .cta h2 {
-      font-size:
-        clamp(35px, 5vw, 55px);
-
-      margin-bottom:
-        17px;
-
-      position:
-        relative;
-    }
-
-    .cta p {
-      color:
-        #9898a8;
-
-      margin-bottom:
-        30px;
-
-      position:
-        relative;
-    }
-
-
-    /* ================================
-       FOOTER
-    ================================= */
-
-    footer {
-      border-top:
-        1px solid
-        rgba(255,255,255,0.07);
-
-      padding:
-        35px 8%;
-
-      display:
-        flex;
-
-      justify-content:
-        space-between;
-
-      align-items:
-        center;
-
-      color:
-        #696977;
-
-      font-size:
-        13px;
-    }
-
-    footer a {
-      color:
-        #9999a7;
-
-      text-decoration:
-        none;
-
-      margin-left:
-        20px;
-    }
-
-    footer a:hover {
-      color:
-        white;
-    }
-
-
-    /* ================================
-       ANIMATIONS
-    ================================= */
-
-    @keyframes floatDrone {
-      0% {
-        transform:
-          translate(-50%, -50%);
+    @media(max-width:720px){
+      nav{height:68px}
+      .nav-links{
+        position:fixed;top:68px;left:0;right:0;
+        padding:18px 20px 22px;
+        background:rgba(6,6,11,.96);
+        border-bottom:1px solid var(--border);
+        flex-direction:column;align-items:stretch;gap:8px;
+        transform:translateY(-130%);transition:.25s;z-index:-1;
       }
-
-      50% {
-        transform:
-          translate(-50%, calc(-50% - 14px));
-      }
-
-      100% {
-        transform:
-          translate(-50%, -50%);
-      }
+      .nav-links.open{transform:none}
+      .nav-links a{padding:12px 8px;margin:0}
+      .menu-btn{display:block}
+      .hero{padding-top:105px}
+      .hero-copy h1{letter-spacing:-3px}
+      .hero-visual{min-height:500px}
+      .phone.main{width:255px;right:5%}
+      .phone.back{width:190px;left:2%;top:85px}
+      .float-pill{font-size:10px}
+      .stat-strip{grid-template-columns:repeat(2,1fr)}
+      .section{padding:85px 0}
+      .section-head{margin-bottom:38px}
+      .feature-grid,.units{grid-template-columns:1fr}
+      .shot-wrap{min-height:565px}
+      .shot-card{width:min(330px,82vw)}
+      .gallery{grid-template-columns:1fr 1fr;gap:10px}
+      .social-wrap{padding:38px 20px}
+      .footer-inner{flex-direction:column;text-align:center}
     }
 
-    @keyframes corePulse {
-      0%, 100% {
-        transform:
-          translate(-50%, -50%)
-          scale(1);
-
-        opacity:
-          0.9;
-      }
-
-      50% {
-        transform:
-          translate(-50%, -50%)
-          scale(1.08);
-
-        opacity:
-          1;
-      }
+    @media(max-width:440px){
+      .container{width:min(100% - 26px,1180px)}
+      .hero-copy h1{font-size:57px;letter-spacing:-2px}
+      .hero-copy .lead{font-size:20px}
+      .hero-visual{min-height:430px}
+      .phone.main{width:220px;right:3%}
+      .phone.back{width:165px;left:0;top:75px}
+      .pill-1{right:0;top:70px}
+      .pill-2{left:0;bottom:70px}
+      .stat{padding:18px}
+      .showcase{gap:65px}
+      .shot-wrap{min-height:500px}
+      .gallery{grid-template-columns:1fr}
+      .social{width:100%}
     }
 
-    @keyframes rotateRing {
-      from {
-        transform:
-          rotate(0deg);
-      }
-
-      to {
-        transform:
-          rotate(360deg);
-      }
-    }
-
-
-    /* ================================
-       RESPONSIVE
-    ================================= */
-
-    @media (max-width: 1200px) {
-
-      .drone-wrap {
-        left:
-          -20px;
-
-        opacity:
-          0.6;
-
-        transform:
-          translateY(-50%)
-          scale(0.8);
-      }
-
-      .armor-wrap {
-        right:
-          -45px;
-
-        opacity:
-          0.6;
-
-        transform:
-          scale(0.82);
-
-        transform-origin:
-          bottom right;
-      }
-
-    }
-
-
-    @media (max-width: 900px) {
-
-      .drone-wrap,
-      .armor-wrap {
-        display:
-          none;
-      }
-
-      .hero-content {
-        max-width:
-          760px;
-      }
-
-    }
-
-
-    @media (max-width: 800px) {
-
-      nav {
-        padding:
-          0 5%;
-      }
-
-      .nav-links {
-        display:
-          none;
-      }
-
-      h1 {
-        letter-spacing:
-          -2px;
-      }
-
-      .cards {
-        grid-template-columns:
-          1fr;
-      }
-
-      .features {
-        padding-top:
-          70px;
-      }
-
-      .cta {
-        margin-left:
-          20px;
-
-        margin-right:
-          20px;
-      }
-
-      footer {
-        flex-direction:
-          column;
-
-        gap:
-          15px;
-
-        text-align:
-          center;
-      }
-
-      footer a {
-        margin:
-          0 8px;
-      }
-
+    @media(prefers-reduced-motion:reduce){
+      *{scroll-behavior:auto !important;animation:none !important;transition:none !important}
+      .reveal{opacity:1;transform:none}
     }
   </style>
 </head>
 
-
 <body>
 
-
-  <!-- NAVIGATION -->
-
-  <nav>
-
-    <div class="logo">
-      NOVA <span>SURVIVAL</span>
+<nav>
+  <div class="nav-inner">
+    <a class="logo" href="#top">NOVA <span>SURVIVAL</span></a>
+    <button class="menu-btn" aria-label="Open menu" id="menuBtn">☰</button>
+    <div class="nav-links" id="navLinks">
+      <a href="#game">GAME</a>
+      <a href="#features">FEATURES</a>
+      <a href="#upgrades">UPGRADES</a>
+      <a href="#enemies">UNITS</a>
+      <a href="#gallery">GALLERY</a>
+      <a href="#community">COMMUNITY</a>
+      <a class="nav-play" href="https://play.google.com/store/apps/details?id=com.novasurvival.android" target="_blank" rel="noopener noreferrer">PLAY NOW</a>
     </div>
+  </div>
+</nav>
 
-    <div class="nav-links">
+<main id="top">
+  <section class="hero" id="game">
+    <div class="container hero-grid">
+      <div class="hero-copy reveal">
+        <div class="eyebrow">SURVIVAL • ACTION • ROGUELITE</div>
+        <h1><span class="gradient-text">NOVA</span><br>SURVIVAL</h1>
+        <div class="lead">Survive. Upgrade. Dominate.</div>
+        <p class="desc">
+          Enter a fast-paced survival battlefield where every run becomes a new build.
+          Dodge enemy pressure, collect XP, choose upgrades, surround yourself with powerful support and keep pushing the score higher.
+        </p>
 
-      <a href="#game">
-        GAME
-      </a>
+        <div class="buttons">
+          <a class="button primary" href="https://play.google.com/store/apps/details?id=com.novasurvival.android" target="_blank" rel="noopener noreferrer">PLAY ON GOOGLE PLAY</a>
+          <a class="button secondary" href="#upgrades">EXPLORE THE GAME</a>
+        </div>
+      </div>
 
-      <a href="#features">
-        FEATURES
-      </a>
-
-      <a
-        href="https://sites.google.com/view/novasurvivalprivacypolicy/ana-sayfa"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        PRIVACY
-      </a>
-
+      <div class="hero-visual reveal">
+        <div class="phone back"><img src="assets/gameplay-dark.jpg" alt="Nova Survival gameplay"></div>
+        <div class="phone main"><img src="assets/gameplay-purple-3.jpg" alt="Nova Survival combat"></div>
+        <div class="float-pill pill-1">⚡ BUILD YOUR RUN</div>
+        <div class="float-pill pill-2">✦ CHASE A NEW HIGH SCORE</div>
+      </div>
     </div>
-
-  </nav>
-
-
-
-  <!-- HERO -->
-
-  <section
-    class="hero"
-    id="game"
-  >
-
-    <div class="hero-glow"></div>
-
-
-    <!-- LEFT DRONE -->
-
-    <div class="drone-wrap">
-
-      <div class="drone">
-
-        <div class="drone-ring"></div>
-
-        <div class="drone-core"></div>
-
-      </div>
-
-    </div>
-
-
-
-    <!-- RIGHT ARMOR -->
-
-    <div class="armor-wrap">
-
-      <div class="armor-glow"></div>
-
-      <div class="armor-head">
-
-        <div class="visor"></div>
-
-      </div>
-
-      <div class="armor-body">
-
-        <div class="armor-core"></div>
-
-        <div class="armor-line line-one"></div>
-
-        <div class="armor-line line-two"></div>
-
-      </div>
-
-      <div class="armor-leg leg-left"></div>
-
-      <div class="armor-leg leg-right"></div>
-
-    </div>
-
-
-
-    <!-- HERO CONTENT -->
-
-    <div class="hero-content">
-
-      <div class="mini-title">
-        SURVIVAL • ACTION • ROGUELITE
-      </div>
-
-
-      <h1>
-
-        <span class="gradient-text">
-          NOVA
-        </span>
-
-        <br>
-
-        SURVIVAL
-
-      </h1>
-
-
-      <div class="tagline">
-        Survive. Upgrade. Dominate.
-      </div>
-
-
-      <p class="description">
-
-        Enter a fast-paced survival battle against
-        relentless waves of enemies.
-
-        Collect XP, level up, create powerful upgrade
-        combinations and fight to survive longer with
-        every run.
-
-      </p>
-
-
-      <div class="buttons">
-
-        <a
-          class="button primary"
-          href="https://play.google.com/store/apps/details?id=com.novasurvival.android"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          PLAY ON GOOGLE PLAY
-        </a>
-
-
-        <a
-          class="button secondary"
-          href="#features"
-        >
-          EXPLORE THE GAME
-        </a>
-
-      </div>
-
-    </div>
-
   </section>
 
-
-
-  <!-- FEATURES -->
-
-  <section
-    class="features"
-    id="features"
-  >
-
-    <div class="section-title">
-
-      <p>
-        THE GAME
-      </p>
-
-      <h2>
-        Fight. Adapt. Survive.
-      </h2>
-
+  <div class="container">
+    <div class="stat-strip reveal">
+      <div class="stat"><strong>3</strong><span>Difficulty paths</span></div>
+      <div class="stat"><strong>XP</strong><span>Level-based upgrade choices</span></div>
+      <div class="stat"><strong>Major</strong><span>Run-defining upgrade picks</span></div>
+      <div class="stat"><strong>∞</strong><span>Score chasing mindset</span></div>
     </div>
+  </div>
 
-
-    <div class="cards">
-
-
-      <div class="card">
-
-        <div class="number">
-          01
-        </div>
-
-        <h3>
-          Survive the Waves
-        </h3>
-
-        <p>
-          Face increasingly dangerous waves of enemies
-          and push your survival skills as far as possible.
-        </p>
-
+  <section class="section" id="features">
+    <div class="container">
+      <div class="section-head reveal">
+        <div class="eyebrow">THE GAME</div>
+        <h2>Every run asks for a different answer.</h2>
+        <p>Movement, timing, build choices and enemy pressure all stack together. The longer you survive, the more your build starts to feel like a controlled storm.</p>
       </div>
 
-
-
-      <div class="card">
-
-        <div class="number">
-          02
-        </div>
-
-        <h3>
-          Build Your Power
-        </h3>
-
-        <p>
-          Collect XP, level up and choose powerful
-          upgrades to create a stronger build during
-          every run.
-        </p>
-
+      <div class="feature-grid">
+        <article class="feature-card reveal">
+          <div class="num">01</div><h3>Survive the Waves</h3>
+          <p>Enemy pressure keeps climbing. Position well, stay mobile and avoid getting boxed in.</p>
+        </article>
+        <article class="feature-card reveal">
+          <div class="num">02</div><h3>Build Your Power</h3>
+          <p>Collect XP and turn each level into a stronger build with offensive, defensive and utility choices.</p>
+        </article>
+        <article class="feature-card reveal">
+          <div class="num">03</div><h3>Adapt to Enemy Types</h3>
+          <p>Different threats force you to react differently instead of mindlessly circling the same route forever.</p>
+        </article>
+        <article class="feature-card reveal">
+          <div class="num">04</div><h3>Choose Your Risk</h3>
+          <p>Pick the difficulty that fits your run, then push into higher-risk battles when you want a tougher challenge.</p>
+        </article>
+        <article class="feature-card reveal">
+          <div class="num">05</div><h3>Unlock & Customize</h3>
+          <p>Bring your own visual style into the battlefield with unlockable items and cosmetics.</p>
+        </article>
+        <article class="feature-card reveal">
+          <div class="num">06</div><h3>Chase the Score</h3>
+          <p>Every second survived and every enemy defeated becomes another chance to beat your best run.</p>
+        </article>
       </div>
-
-
-
-      <div class="card">
-
-        <div class="number">
-          03
-        </div>
-
-        <h3>
-          Different Enemies
-        </h3>
-
-        <p>
-          Fight different enemy types with unique
-          behaviors and threats that force you to
-          constantly adapt.
-        </p>
-
-      </div>
-
-
-
-      <div class="card">
-
-        <div class="number">
-          04
-        </div>
-
-        <h3>
-          Choose Your Difficulty
-        </h3>
-
-        <p>
-          Take on different difficulty levels and
-          increase the challenge when you're ready
-          for something more dangerous.
-        </p>
-
-      </div>
-
-
-
-      <div class="card">
-
-        <div class="number">
-          05
-        </div>
-
-        <h3>
-          Unlock & Customize
-        </h3>
-
-        <p>
-          Unlock items and cosmetics, customize your
-          experience and enter the battlefield with
-          your own style.
-        </p>
-
-      </div>
-
-
-
-      <div class="card">
-
-        <div class="number">
-          06
-        </div>
-
-        <h3>
-          Chase Your High Score
-        </h3>
-
-        <p>
-          Defeat more enemies, survive longer and keep
-          pushing until you beat your highest score.
-        </p>
-
-      </div>
-
-
     </div>
-
   </section>
 
+  <section class="section" id="upgrades">
+    <div class="container">
+      <div class="section-head reveal">
+        <div class="eyebrow">BUILD SYSTEM</div>
+        <h2>Turn XP into a build.</h2>
+        <p>Normal upgrades shape the rhythm of your run. Major upgrades can change the direction of the run itself.</p>
+      </div>
 
+      <div class="showcase">
+        <div class="show-row">
+          <div class="shot-wrap reveal">
+            <div class="shot-glow"></div>
+            <div class="shot-card"><img src="assets/level-up.jpg" alt="Nova Survival level up screen"></div>
+          </div>
+          <div class="copy reveal">
+            <div class="eyebrow">LEVEL UP</div>
+            <h3>Choose. Combine. Escalate.</h3>
+            <p>
+              Level-ups put a set of powers in front of you and force a decision. Pick sustain, additional projectiles, damage-focused options or utility, then keep building around the choices that fit the current run.
+            </p>
+            <div class="bullet-list">
+              <div class="bullet"><div class="dot"></div><div><b>Lifesteal</b><br><span>Recover a small amount of health through direct hits.</span></div></div>
+              <div class="bullet"><div class="dot"></div><div><b>Twin Stream</b><br><span>Add extra shots and increase the pressure your build can output.</span></div></div>
+              <div class="bullet"><div class="dot"></div><div><b>Nova Ammo</b><br><span>Push projectile behavior toward stronger penetration and damage.</span></div></div>
+            </div>
+          </div>
+        </div>
 
-  <!-- CALL TO ACTION -->
+        <div class="show-row reverse">
+          <div class="shot-wrap reveal">
+            <div class="shot-glow"></div>
+            <div class="shot-card"><img src="assets/major-upgrade.jpg" alt="Nova Survival major upgrade screen"></div>
+          </div>
+          <div class="copy reveal">
+            <div class="eyebrow">MAJOR UPGRADES</div>
+            <h3>Big power. Real tradeoffs.</h3>
+            <p>
+              Major upgrades are built to feel different from ordinary level-up choices. They can open breathing room, accelerate progression or push a run into a more aggressive direction, but the strongest choices come with tradeoffs.
+            </p>
+            <div class="bullet-list">
+              <div class="bullet"><div class="dot"></div><div><b>Shield Pulse</b><br><span>Taking damage can create knockback space around you, but it is not a free escape from every hit.</span></div></div>
+              <div class="bullet"><div class="dot"></div><div><b>XP Overload</b><br><span>Accelerates levelling and build growth while changing the pacing of the run.</span></div></div>
+              <div class="bullet"><div class="dot"></div><div><b>One-run identity</b><br><span>Major choices are designed to make one run feel meaningfully different from the next.</span></div></div>
+            </div>
+          </div>
+        </div>
 
-  <section class="cta">
-
-    <h2>
-      How long can you survive?
-    </h2>
-
-    <p>
-      Enter Nova Survival and push your build to its limit.
-    </p>
-
-    <a
-      class="button primary"
-      href="https://play.google.com/store/apps/details?id=com.novasurvival.android"
-      target="_blank"
-      rel="noopener noreferrer"
-    >
-      PLAY NOW
-    </a>
-
+        <div class="show-row">
+          <div class="shot-wrap reveal">
+            <div class="shot-glow"></div>
+            <div class="shot-card"><img src="assets/gameplay-dark.jpg" alt="Nova Survival high intensity gameplay"></div>
+          </div>
+          <div class="copy reveal">
+            <div class="eyebrow">COMBAT FLOW</div>
+            <h3>Your build becomes visible on the battlefield.</h3>
+            <p>
+              Extra projectiles, orbiting support and enemy patterns begin to overlap as the run grows. What starts as simple movement becomes a dense survival puzzle where your build and positioning have to work together.
+            </p>
+            <div class="bullet-list">
+              <div class="bullet"><div class="dot"></div><div><b>Support around the core</b><br><span>Companion-style units can turn your center into a moving combat formation.</span></div></div>
+              <div class="bullet"><div class="dot"></div><div><b>Projectile pressure</b><br><span>Shots, enemy fire and pickups create a screen that gets increasingly active over time.</span></div></div>
+              <div class="bullet"><div class="dot"></div><div><b>Readable threats</b><br><span>Distinct colors and silhouettes help different enemies remain recognizable in crowded fights.</span></div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </section>
 
+  <section class="section" id="enemies">
+    <div class="container">
+      <div class="section-head reveal">
+        <div class="eyebrow">BATTLEFIELD UNITS</div>
+        <h2>Recognize the threat before it reaches you.</h2>
+        <p>These visuals are cropped directly from the gameplay you supplied, so the page uses the real in-game look instead of fake website-only mascots.</p>
+      </div>
 
-
-  <!-- FOOTER -->
-
-  <footer>
-
-    <div>
-      © 2026 Nova Survival. All rights reserved.
+      <div class="units">
+        <article class="unit reveal">
+          <div class="unit-art"><img src="assets/player-core.jpg" alt="Nova Survival player core"></div>
+          <h3>Nova Core</h3>
+          <p>The center of the run. Your movement, build choices and surrounding support all revolve around keeping this core alive.</p>
+          <span class="tag">PLAYER</span>
+        </article>
+        <article class="unit reveal">
+          <div class="unit-art"><img src="assets/support-drone.jpg" alt="Nova Survival support drone"></div>
+          <h3>Support Drone</h3>
+          <p>Bright cyan support units orbit close to the player and make a late-run build feel like a moving formation instead of a lone target.</p>
+          <span class="tag">SUPPORT</span>
+        </article>
+        <article class="unit reveal">
+          <div class="unit-art"><img src="assets/purple-enemy.jpg" alt="Nova Survival purple enemy"></div>
+          <h3>Ranged Threat</h3>
+          <p>Purple ranged enemies add pressure from outside the immediate swarm and punish careless positioning.</p>
+          <span class="tag">RANGED</span>
+        </article>
+        <article class="unit reveal">
+          <div class="unit-art"><img src="assets/red-enemy.jpg" alt="Nova Survival red enemy"></div>
+          <h3>Wave Enemy</h3>
+          <p>Red enemies form the visible frontline of the wave and help turn open space into a route-planning problem.</p>
+          <span class="tag">WAVE</span>
+        </article>
+      </div>
     </div>
+  </section>
 
-
-    <div>
-
-      <a
-        href="https://sites.google.com/view/novasurvivalprivacypolicy/ana-sayfa"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        Privacy Policy
-      </a>
-
-
-      <a
-        href="mailto:novasurvivalgame@gmail.com"
-      >
-        Contact
-      </a>
-
+  <section class="section" id="gallery">
+    <div class="container">
+      <div class="section-head reveal">
+        <div class="eyebrow">GAMEPLAY GALLERY</div>
+        <h2>From clean starts to screen-filling builds.</h2>
+        <p>A run changes fast. The gallery follows that escalation across different moments and battlefield colors.</p>
+      </div>
+      <div class="gallery">
+        <figure class="reveal"><img src="assets/gameplay-red.jpg" alt="Nova Survival gameplay red stage"></figure>
+        <figure class="reveal"><img src="assets/gameplay-red-2.jpg" alt="Nova Survival gameplay with projectiles"></figure>
+        <figure class="reveal"><img src="assets/gameplay-purple-1.jpg" alt="Nova Survival purple stage"></figure>
+        <figure class="reveal"><img src="assets/gameplay-purple-2.jpg" alt="Nova Survival mid run"></figure>
+        <figure class="reveal"><img src="assets/gameplay-purple-3.jpg" alt="Nova Survival larger build"></figure>
+        <figure class="reveal"><img src="assets/gameplay-dark.jpg" alt="Nova Survival dark late run"></figure>
+        <figure class="reveal"><img src="assets/level-up.jpg" alt="Nova Survival upgrade selection"></figure>
+        <figure class="reveal"><img src="assets/major-upgrade.jpg" alt="Nova Survival major upgrade selection"></figure>
+      </div>
     </div>
+  </section>
 
-  </footer>
+  <section class="section" id="community">
+    <div class="container">
+      <div class="social-wrap reveal">
+        <div class="eyebrow">FOLLOW NOVA SURVIVAL</div>
+        <h2>Updates, clips and new runs.</h2>
+        <p>Follow development and gameplay posts across the official Nova Survival channels.</p>
+        <div class="social-links">
+          <a class="social" href="https://www.instagram.com/novasurvivalgame/" target="_blank" rel="noopener noreferrer">Instagram</a>
+          <a class="social" href="https://www.tiktok.com/@novasurvivalgame?lang=" target="_blank" rel="noopener noreferrer">TikTok</a>
+          <a class="social" href="https://www.youtube.com/@NovaSurvivalGame" target="_blank" rel="noopener noreferrer">YouTube</a>
+        </div>
+      </div>
+    </div>
+  </section>
 
+  <section class="container cta reveal">
+    <h2>How long can you survive?</h2>
+    <p>Build your run, survive the pressure and push for a higher score.</p>
+    <a class="button primary" href="https://play.google.com/store/apps/details?id=com.novasurvival.android" target="_blank" rel="noopener noreferrer">PLAY NOVA SURVIVAL</a>
+  </section>
+</main>
+
+<footer>
+  <div class="container footer-inner">
+    <div>© 2026 Nova Survival. All rights reserved.</div>
+    <div class="footer-links">
+      <a href="https://sites.google.com/view/novasurvivalprivacypolicy/ana-sayfa" target="_blank" rel="noopener noreferrer">Privacy Policy</a>
+      <a href="mailto:novasurvivalgame@gmail.com">Contact</a>
+      <a href="/app-ads.txt">app-ads.txt</a>
+      <a href="https://www.instagram.com/novasurvivalgame/" target="_blank" rel="noopener noreferrer">Instagram</a>
+      <a href="https://www.tiktok.com/@novasurvivalgame?lang=" target="_blank" rel="noopener noreferrer">TikTok</a>
+      <a href="https://www.youtube.com/@NovaSurvivalGame" target="_blank" rel="noopener noreferrer">YouTube</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  const menuBtn = document.getElementById('menuBtn');
+  const navLinks = document.getElementById('navLinks');
+
+  menuBtn.addEventListener('click', () => {
+    navLinks.classList.toggle('open');
+  });
+
+  document.querySelectorAll('#navLinks a').forEach(a => {
+    a.addEventListener('click', () => navLinks.classList.remove('open'));
+  });
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('show');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12 });
+
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+</script>
 
 </body>
 </html>
