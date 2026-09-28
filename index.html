@@ -8,10 +8,10 @@
 
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Nova Survival | Survive. Upgrade. Dominate.</title>
-  <meta name="description" content="Nova Survival is a fast-paced roguelite survival game. Fight relentless enemy waves, collect XP, build powerful upgrades and chase a new high score.">
-  <meta property="og:title" content="Nova Survival">
-  <meta property="og:description" content="Survive relentless waves. Build your power. Push for a new high score.">
+  <title>Nova Survival | Survive. Upgrade. Dominate.</title>
+  <meta id="metaDescription" name="description" content="Nova Survival is a fast-paced roguelite survival game. Fight relentless enemy waves, collect XP, build powerful upgrades and chase a new high score.">
+  <meta id="ogTitle" property="og:title" content="Nova Survival">
+  <meta id="ogDescription" property="og:description" content="Survive relentless waves. Build your power. Push for a new high score.">
   <meta property="og:type" content="website">
 
   <style>
@@ -35,7 +35,7 @@
     }
 
     *{box-sizing:border-box;margin:0;padding:0}
-    html{scroll-behavior:smooth}
+    html{scroll-behavior:smooth;overflow-x:hidden}
     body{
       font-family:Inter,ui-sans-serif,-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;
       color:var(--text);
@@ -60,7 +60,13 @@
     }
 
     a{color:inherit}
+    a:focus-visible,button:focus-visible{outline:2px solid #b58cff;outline-offset:4px}
     img{display:block;max-width:100%}
+    .sr-only{
+      position:absolute!important;width:1px!important;height:1px!important;
+      padding:0!important;margin:-1px!important;overflow:hidden!important;
+      clip:rect(0,0,0,0)!important;white-space:nowrap!important;border:0!important;
+    }
     .container{width:min(1180px,calc(100% - 40px));margin:auto}
     .eyebrow{
       color:#a982ff;
@@ -103,6 +109,35 @@
     .menu-btn{
       display:none;background:none;border:0;color:white;font-size:27px;cursor:pointer;
     }
+    .nav-actions{display:flex;align-items:center;gap:10px}
+    .language-picker{
+      position:relative;display:flex;align-items:center;
+      border:1px solid rgba(255,255,255,.13);
+      border-radius:11px;background:rgba(255,255,255,.045);
+      transition:.2s;overflow:hidden;
+    }
+    .language-picker:hover{background:rgba(255,255,255,.075);border-color:rgba(168,126,255,.38)}
+    .language-picker:focus-within{
+      border-color:#a982ff;
+      box-shadow:0 0 0 3px rgba(155,108,255,.18);
+    }
+    .language-icon{
+      position:absolute;inset-inline-start:11px;pointer-events:none;
+      font-size:14px;line-height:1;color:#c9b4ff;
+    }
+    .language-picker::after{
+      content:"";position:absolute;inset-inline-end:11px;pointer-events:none;
+      width:6px;height:6px;border-inline-end:1.5px solid #bdbdca;
+      border-bottom:1.5px solid #bdbdca;transform:rotate(45deg) translateY(-2px);
+    }
+    .language-select{
+      appearance:none;-webkit-appearance:none;border:0;outline:0;
+      min-width:132px;max-width:160px;padding:9px 29px 9px 32px;
+      color:#dedee8;background:transparent;cursor:pointer;
+      font:800 11px/1.2 Inter,ui-sans-serif,-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;
+      letter-spacing:.25px;
+    }
+    [dir="rtl"] .language-select{padding:9px 32px 9px 29px}
 
     /* HERO */
     .hero{
@@ -584,6 +619,12 @@
     .reveal.show{opacity:1;transform:none}
 
     /* MOBILE */
+    @media(max-width:1080px){
+      .nav-links{gap:14px}
+      .nav-links a{font-size:11px}
+      .language-select{min-width:118px;max-width:132px}
+    }
+
     @media(max-width:1180px){
       .units{grid-template-columns:repeat(3,1fr)}
     }
@@ -603,7 +644,7 @@
       .gallery figure:nth-child(2),.gallery figure:nth-child(4){margin-top:0}
     }
 
-    @media(max-width:720px){
+    @media(max-width:900px){
       nav{height:68px}
       .nav-links{
         position:fixed;top:68px;left:0;right:0;
@@ -616,6 +657,10 @@
       .nav-links.open{transform:none}
       .nav-links a{padding:12px 8px;margin:0}
       .menu-btn{display:block}
+      .language-select{min-width:124px;max-width:145px}
+    }
+
+    @media(max-width:720px){
       .hero{padding-top:105px}
       .hero-copy h1{letter-spacing:-3px}
       .hero-visual{min-height:500px}
@@ -636,6 +681,12 @@
 
     @media(max-width:440px){
       .container{width:min(100% - 26px,1180px)}
+      .nav-inner{width:min(100% - 24px,1280px)}
+      .logo{font-size:16px;letter-spacing:1.15px}
+      .nav-actions{gap:7px}
+      .language-select{min-width:0;width:112px;padding-inline-start:29px;font-size:10px}
+      .language-icon{inset-inline-start:9px}
+      .language-picker::after{inset-inline-end:9px}
       .hero-copy h1{font-size:57px;letter-spacing:-2px}
       .hero-copy .lead{font-size:20px}
       .hero-visual{min-height:430px}
@@ -660,18 +711,38 @@
 
 <body>
 
-<nav>
+<nav aria-label="Primary navigation" data-i18n-aria="aria.primaryNav">
   <div class="nav-inner">
     <a class="logo" href="#top">NOVA <span>SURVIVAL</span></a>
-    <button class="menu-btn" aria-label="Open menu" id="menuBtn">☰</button>
     <div class="nav-links" id="navLinks">
-      <a href="#game">GAME</a>
-      <a href="#features">FEATURES</a>
-      <a href="#upgrades">UPGRADES</a>
-      <a href="#enemies">UNITS</a>
-      <a href="#gallery">GALLERY</a>
-      <a href="#community">COMMUNITY</a>
-      <a class="nav-play" href="https://play.google.com/store/apps/details?id=com.novasurvival.android" target="_blank" rel="noopener noreferrer">PLAY NOW</a>
+      <a href="#game" data-i18n="nav.game">GAME</a>
+      <a href="#features" data-i18n="nav.features">FEATURES</a>
+      <a href="#upgrades" data-i18n="nav.upgrades">UPGRADES</a>
+      <a href="#enemies" data-i18n="nav.units">UNITS</a>
+      <a href="#gallery" data-i18n="nav.gallery">GALLERY</a>
+      <a href="#community" data-i18n="nav.community">COMMUNITY</a>
+      <a class="nav-play" href="https://play.google.com/store/apps/details?id=com.novasurvival.android" target="_blank" rel="noopener noreferrer" data-i18n="nav.play">PLAY NOW</a>
+    </div>
+    <div class="nav-actions">
+      <div class="language-picker">
+        <label class="sr-only" for="languageSelect" data-i18n="language.label">Language</label>
+        <span class="language-icon" aria-hidden="true">◎</span>
+        <select class="language-select" id="languageSelect" aria-label="Language" data-i18n-aria="language.label">
+          <option value="en">English</option>
+          <option value="tr">Türkçe</option>
+          <option value="de">Deutsch</option>
+          <option value="fr">Français</option>
+          <option value="zh-Hans">简体中文</option>
+          <option value="ru">Русский</option>
+          <option value="ar">العربية</option>
+          <option value="ko">한국어</option>
+          <option value="it">Italiano</option>
+          <option value="es">Español</option>
+          <option value="pt">Português</option>
+          <option value="ja">日本語</option>
+        </select>
+      </div>
+      <button class="menu-btn" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="navLinks" data-i18n-aria="aria.openMenu" id="menuBtn">☰</button>
     </div>
   </div>
 </nav>
@@ -680,21 +751,21 @@
   <section class="hero" id="game">
     <div class="container hero-grid">
       <div class="hero-copy reveal">
-        <div class="eyebrow">SURVIVAL • ACTION • ROGUELITE</div>
+        <div class="eyebrow" data-i18n="hero.eyebrow">SURVIVAL • ACTION • ROGUELITE</div>
         <h1><span class="gradient-text">NOVA</span><br>SURVIVAL</h1>
-        <div class="lead">Survive. Upgrade. Dominate.</div>
-        <p class="desc">
+        <div class="lead" data-i18n="hero.lead">Survive. Upgrade. Dominate.</div>
+        <p class="desc" data-i18n="hero.description">
           Enter a fast-paced survival battlefield where every run becomes a new build.
           Dodge enemy pressure, collect XP, choose upgrades, surround yourself with powerful support and keep pushing the score higher.
         </p>
 
         <div class="buttons">
-          <a class="button primary" href="https://play.google.com/store/apps/details?id=com.novasurvival.android" target="_blank" rel="noopener noreferrer">PLAY ON GOOGLE PLAY</a>
-          <a class="button secondary" href="#upgrades">EXPLORE THE GAME</a>
+          <a class="button primary" href="https://play.google.com/store/apps/details?id=com.novasurvival.android" target="_blank" rel="noopener noreferrer" data-i18n="hero.play">PLAY ON GOOGLE PLAY</a>
+          <a class="button secondary" href="#upgrades" data-i18n="hero.explore">EXPLORE THE GAME</a>
         </div>
       </div>
 
-      <div class="hero-visual reveal" aria-label="Animated Nova Survival core emblem">
+      <div class="hero-visual reveal" aria-label="Animated Nova Survival core emblem" data-i18n-aria="aria.hero">
         <div class="nova-orbit">
           <div class="orbit-ring ring-c"></div>
 
@@ -718,53 +789,53 @@
           <span class="energy-spark spark-4"></span>
         </div>
 
-        <div class="float-pill pill-1">⚡ BUILD YOUR RUN</div>
-        <div class="float-pill pill-2">✦ CHASE A NEW HIGH SCORE</div>
+        <div class="float-pill pill-1"><span aria-hidden="true">⚡</span> <span data-i18n="hero.pillBuild">BUILD YOUR RUN</span></div>
+        <div class="float-pill pill-2"><span aria-hidden="true">✦</span> <span data-i18n="hero.pillScore">CHASE A NEW HIGH SCORE</span></div>
       </div>
     </div>
   </section>
 
   <div class="container">
     <div class="stat-strip reveal">
-      <div class="stat"><strong>3</strong><span>Difficulty paths</span></div>
-      <div class="stat"><strong>XP</strong><span>Level-based upgrade choices</span></div>
-      <div class="stat"><strong>Major</strong><span>Run-defining upgrade picks</span></div>
-      <div class="stat"><strong>∞</strong><span>Score chasing mindset</span></div>
+      <div class="stat"><strong>3</strong><span data-i18n="stats.difficulty">Difficulty paths</span></div>
+      <div class="stat"><strong>XP</strong><span data-i18n="stats.level">Level-based upgrade choices</span></div>
+      <div class="stat"><strong data-i18n="stats.majorValue">Major</strong><span data-i18n="stats.major">Run-defining upgrade picks</span></div>
+      <div class="stat"><strong>∞</strong><span data-i18n="stats.score">Score chasing mindset</span></div>
     </div>
   </div>
 
   <section class="section" id="features">
     <div class="container">
       <div class="section-head reveal">
-        <div class="eyebrow">THE GAME</div>
-        <h2>Every run asks for a different answer.</h2>
-        <p>Movement, timing, build choices and enemy pressure all stack together. The longer you survive, the more your build starts to feel like a controlled storm.</p>
+        <div class="eyebrow" data-i18n="features.eyebrow">THE GAME</div>
+        <h2 data-i18n="features.title">Every run asks for a different answer.</h2>
+        <p data-i18n="features.description">Movement, timing, build choices and enemy pressure all stack together. The longer you survive, the more your build starts to feel like a controlled storm.</p>
       </div>
 
       <div class="feature-grid">
         <article class="feature-card reveal">
-          <div class="num">01</div><h3>Survive the Waves</h3>
-          <p>Enemy pressure keeps climbing. Position well, stay mobile and avoid getting boxed in.</p>
+          <div class="num">01</div><h3 data-i18n="features.surviveTitle">Survive the Waves</h3>
+          <p data-i18n="features.surviveDescription">Enemy pressure keeps climbing. Position well, stay mobile and avoid getting boxed in.</p>
         </article>
         <article class="feature-card reveal">
-          <div class="num">02</div><h3>Build Your Power</h3>
-          <p>Collect XP and turn each level into a stronger build with offensive, defensive and utility choices.</p>
+          <div class="num">02</div><h3 data-i18n="features.buildTitle">Build Your Power</h3>
+          <p data-i18n="features.buildDescription">Collect XP and turn each level into a stronger build with offensive, defensive and utility choices.</p>
         </article>
         <article class="feature-card reveal">
-          <div class="num">03</div><h3>Adapt to Enemy Types</h3>
-          <p>Different threats force you to react differently instead of mindlessly circling the same route forever.</p>
+          <div class="num">03</div><h3 data-i18n="features.adaptTitle">Adapt to Enemy Types</h3>
+          <p data-i18n="features.adaptDescription">Different threats force you to react differently instead of mindlessly circling the same route forever.</p>
         </article>
         <article class="feature-card reveal">
-          <div class="num">04</div><h3>Choose Your Risk</h3>
-          <p>Pick the difficulty that fits your run, then push into higher-risk battles when you want a tougher challenge.</p>
+          <div class="num">04</div><h3 data-i18n="features.riskTitle">Choose Your Risk</h3>
+          <p data-i18n="features.riskDescription">Pick the difficulty that fits your run, then push into higher-risk battles when you want a tougher challenge.</p>
         </article>
         <article class="feature-card reveal">
-          <div class="num">05</div><h3>Unlock & Customize</h3>
-          <p>Bring your own visual style into the battlefield with unlockable items and cosmetics.</p>
+          <div class="num">05</div><h3 data-i18n="features.customizeTitle">Unlock &amp; Customize</h3>
+          <p data-i18n="features.customizeDescription">Bring your own visual style into the battlefield with unlockable items and cosmetics.</p>
         </article>
         <article class="feature-card reveal">
-          <div class="num">06</div><h3>Chase the Score</h3>
-          <p>Every second survived and every enemy defeated becomes another chance to beat your best run.</p>
+          <div class="num">06</div><h3 data-i18n="features.scoreTitle">Chase the Score</h3>
+          <p data-i18n="features.scoreDescription">Every second survived and every enemy defeated becomes another chance to beat your best run.</p>
         </article>
       </div>
     </div>
@@ -773,27 +844,27 @@
   <section class="section" id="upgrades">
     <div class="container">
       <div class="section-head reveal">
-        <div class="eyebrow">BUILD SYSTEM</div>
-        <h2>Turn XP into a build.</h2>
-        <p>Normal upgrades shape the rhythm of your run. Major upgrades can change the direction of the run itself.</p>
+        <div class="eyebrow" data-i18n="upgrades.eyebrow">BUILD SYSTEM</div>
+        <h2 data-i18n="upgrades.title">Turn XP into a build.</h2>
+        <p data-i18n="upgrades.description">Normal upgrades shape the rhythm of your run. Major upgrades can change the direction of the run itself.</p>
       </div>
 
       <div class="showcase">
         <div class="show-row">
           <div class="shot-wrap reveal">
             <div class="shot-glow"></div>
-            <div class="shot-card"><img src="assets/level-up.jpg" alt="Nova Survival level up screen"></div>
+            <div class="shot-card"><img src="assets/level-up.jpg" alt="Nova Survival level up screen" data-i18n-alt="alt.level"></div>
           </div>
           <div class="copy reveal">
-            <div class="eyebrow">LEVEL UP</div>
-            <h3>Choose. Combine. Escalate.</h3>
-            <p>
+            <div class="eyebrow" data-i18n="level.eyebrow">LEVEL UP</div>
+            <h3 data-i18n="level.title">Choose. Combine. Escalate.</h3>
+            <p data-i18n="level.description">
               Level-ups put a set of powers in front of you and force a decision. Pick sustain, additional projectiles, damage-focused options or utility, then keep building around the choices that fit the current run.
             </p>
             <div class="bullet-list">
-              <div class="bullet"><div class="dot"></div><div><b>Lifesteal</b><br><span>Recover a small amount of health through direct hits.</span></div></div>
-              <div class="bullet"><div class="dot"></div><div><b>Twin Stream</b><br><span>Add extra shots and increase the pressure your build can output.</span></div></div>
-              <div class="bullet"><div class="dot"></div><div><b>Nova Ammo</b><br><span>Push projectile behavior toward stronger penetration and damage.</span></div></div>
+              <div class="bullet"><div class="dot"></div><div><b data-i18n="level.lifestealTitle">Lifesteal</b><br><span data-i18n="level.lifestealDescription">Recover a small amount of health through direct hits.</span></div></div>
+              <div class="bullet"><div class="dot"></div><div><b data-i18n="level.twinTitle">Twin Stream</b><br><span data-i18n="level.twinDescription">Add extra shots and increase the pressure your build can output.</span></div></div>
+              <div class="bullet"><div class="dot"></div><div><b data-i18n="level.ammoTitle">Nova Ammo</b><br><span data-i18n="level.ammoDescription">Push projectile behavior toward stronger penetration and damage.</span></div></div>
             </div>
           </div>
         </div>
@@ -801,18 +872,18 @@
         <div class="show-row reverse">
           <div class="shot-wrap reveal">
             <div class="shot-glow"></div>
-            <div class="shot-card"><img src="assets/major-upgrade.jpg" alt="Nova Survival major upgrade screen"></div>
+            <div class="shot-card"><img src="assets/major-upgrade.jpg" alt="Nova Survival major upgrade screen" data-i18n-alt="alt.major"></div>
           </div>
           <div class="copy reveal">
-            <div class="eyebrow">MAJOR UPGRADES</div>
-            <h3>Big power. Real tradeoffs.</h3>
-            <p>
+            <div class="eyebrow" data-i18n="major.eyebrow">MAJOR UPGRADES</div>
+            <h3 data-i18n="major.title">Big power. Real tradeoffs.</h3>
+            <p data-i18n="major.description">
               Major upgrades are built to feel different from ordinary level-up choices. They can open breathing room, accelerate progression or push a run into a more aggressive direction, but the strongest choices come with tradeoffs.
             </p>
             <div class="bullet-list">
-              <div class="bullet"><div class="dot"></div><div><b>Shield Pulse</b><br><span>Taking damage can create knockback space around you, but it is not a free escape from every hit.</span></div></div>
-              <div class="bullet"><div class="dot"></div><div><b>XP Overload</b><br><span>Accelerates levelling and build growth while changing the pacing of the run.</span></div></div>
-              <div class="bullet"><div class="dot"></div><div><b>One-run identity</b><br><span>Major choices are designed to make one run feel meaningfully different from the next.</span></div></div>
+              <div class="bullet"><div class="dot"></div><div><b data-i18n="major.shieldTitle">Shield Pulse</b><br><span data-i18n="major.shieldDescription">Taking damage can create knockback space around you, but it is not a free escape from every hit.</span></div></div>
+              <div class="bullet"><div class="dot"></div><div><b data-i18n="major.xpTitle">XP Overload</b><br><span data-i18n="major.xpDescription">Accelerates levelling and build growth while changing the pacing of the run.</span></div></div>
+              <div class="bullet"><div class="dot"></div><div><b data-i18n="major.identityTitle">One-run identity</b><br><span data-i18n="major.identityDescription">Major choices are designed to make one run feel meaningfully different from the next.</span></div></div>
             </div>
           </div>
         </div>
@@ -820,18 +891,18 @@
         <div class="show-row">
           <div class="shot-wrap reveal">
             <div class="shot-glow"></div>
-            <div class="shot-card"><img src="assets/gameplay-dark.jpg" alt="Nova Survival high intensity gameplay"></div>
+            <div class="shot-card"><img src="assets/gameplay-dark.jpg" alt="Nova Survival high intensity gameplay" data-i18n-alt="alt.combat"></div>
           </div>
           <div class="copy reveal">
-            <div class="eyebrow">COMBAT FLOW</div>
-            <h3>Your build becomes visible on the battlefield.</h3>
-            <p>
+            <div class="eyebrow" data-i18n="combat.eyebrow">COMBAT FLOW</div>
+            <h3 data-i18n="combat.title">Your build becomes visible on the battlefield.</h3>
+            <p data-i18n="combat.description">
               Extra projectiles, orbiting support and enemy patterns begin to overlap as the run grows. What starts as simple movement becomes a dense survival puzzle where your build and positioning have to work together.
             </p>
             <div class="bullet-list">
-              <div class="bullet"><div class="dot"></div><div><b>Support around the core</b><br><span>Companion-style units can turn your center into a moving combat formation.</span></div></div>
-              <div class="bullet"><div class="dot"></div><div><b>Projectile pressure</b><br><span>Shots, enemy fire and pickups create a screen that gets increasingly active over time.</span></div></div>
-              <div class="bullet"><div class="dot"></div><div><b>Readable threats</b><br><span>Distinct colors and silhouettes help different enemies remain recognizable in crowded fights.</span></div></div>
+              <div class="bullet"><div class="dot"></div><div><b data-i18n="combat.supportTitle">Support around the core</b><br><span data-i18n="combat.supportDescription">Companion-style units can turn your center into a moving combat formation.</span></div></div>
+              <div class="bullet"><div class="dot"></div><div><b data-i18n="combat.projectileTitle">Projectile pressure</b><br><span data-i18n="combat.projectileDescription">Shots, enemy fire and pickups create a screen that gets increasingly active over time.</span></div></div>
+              <div class="bullet"><div class="dot"></div><div><b data-i18n="combat.threatTitle">Readable threats</b><br><span data-i18n="combat.threatDescription">Distinct colors and silhouettes help different enemies remain recognizable in crowded fights.</span></div></div>
             </div>
           </div>
         </div>
@@ -842,9 +913,9 @@
   <section class="section" id="enemies">
     <div class="container">
       <div class="section-head reveal">
-        <div class="eyebrow">ENEMY DATABASE</div>
-        <h2>Learn the threat before it reaches you.</h2>
-        <p>
+        <div class="eyebrow" data-i18n="enemies.eyebrow">ENEMY DATABASE</div>
+        <h2 data-i18n="enemies.title">Learn the threat before it reaches you.</h2>
+        <p data-i18n="enemies.description">
           Nova Survival's enemies do not all pressure you in the same way.
           Some chase, some attack from range, some dive straight into you, and some turn one mistake into a heavy hit.
           Learn their patterns and shape your build around the wave in front of you.
@@ -855,82 +926,82 @@
 
         <article class="unit void-core reveal">
           <div class="unit-art">
-            <img src="assets/enemy-void-core.jpg" alt="Void Core enemy from Nova Survival">
+            <img src="assets/enemy-void-core.jpg" alt="Void Core enemy from Nova Survival" data-i18n-alt="alt.void">
           </div>
-          <div class="unit-type">RANGED ENEMY</div>
+          <div class="unit-type" data-i18n="enemies.voidType">RANGED ENEMY</div>
           <h3>Void Core</h3>
-          <p>
+          <p data-i18n="enemies.voidDescription">
             A purple ranged enemy that keeps its distance and fires energy projectiles at you.
             It creates pressure from outside the main swarm, so standing still for too long is a bad idea.
           </p>
           <div class="unit-meta">
-            <span class="tag">RANGED FIRE</span>
-            <span class="tag">POSITIONING</span>
+            <span class="tag" data-i18n="enemies.rangedTag">RANGED FIRE</span>
+            <span class="tag" data-i18n="enemies.positioningTag">POSITIONING</span>
           </div>
         </article>
 
         <article class="unit blaze-mech reveal">
           <div class="unit-art">
-            <img src="assets/enemy-blaze-mech.jpg" alt="Blaze Mech enemy from Nova Survival">
+            <img src="assets/enemy-blaze-mech.jpg" alt="Blaze Mech enemy from Nova Survival" data-i18n-alt="alt.blaze">
           </div>
-          <div class="unit-type">STANDARD ENEMY</div>
+          <div class="unit-type" data-i18n="enemies.blazeType">STANDARD ENEMY</div>
           <h3>Blaze Mech</h3>
-          <p>
+          <p data-i18n="enemies.blazeDescription">
             The red frontline mech relentlessly chases the player and deals damage on contact.
             Simple behavior, constant pressure. Let too many surround you and the battlefield closes fast.
           </p>
           <div class="unit-meta">
-            <span class="tag">CHASE</span>
-            <span class="tag">CONTACT DAMAGE</span>
+            <span class="tag" data-i18n="enemies.chaseTag">CHASE</span>
+            <span class="tag" data-i18n="enemies.contactTag">CONTACT DAMAGE</span>
           </div>
         </article>
 
         <article class="unit aqua-drone reveal">
           <div class="unit-art">
-            <img src="assets/enemy-aqua-drone.jpg" alt="Aqua Drone enemy from Nova Survival">
+            <img src="assets/enemy-aqua-drone.jpg" alt="Aqua Drone enemy from Nova Survival" data-i18n-alt="alt.aqua">
           </div>
-          <div class="unit-type">HIGH-SPEED ENEMY</div>
+          <div class="unit-type" data-i18n="enemies.aquaType">HIGH-SPEED ENEMY</div>
           <h3>Aqua Drone</h3>
-          <p>
+          <p data-i18n="enemies.aquaDescription">
             A fast flying attacker that rushes directly at you and tries to slam into the player.
             Its speed makes it dangerous, but a well-positioned drone build can remove it quickly.
           </p>
           <div class="unit-meta">
-            <span class="tag">FAST DIVE</span>
-            <span class="tag">DRONE COUNTER</span>
+            <span class="tag" data-i18n="enemies.fastDiveTag">FAST DIVE</span>
+            <span class="tag" data-i18n="enemies.droneTag">DRONE COUNTER</span>
           </div>
         </article>
 
         <article class="unit nova-guard reveal">
           <div class="unit-art">
-            <img src="assets/enemy-nova-guard.jpg" alt="Nova Guard enemy from Nova Survival">
+            <img src="assets/enemy-nova-guard.jpg" alt="Nova Guard enemy from Nova Survival" data-i18n-alt="alt.nova">
           </div>
-          <div class="unit-type">EXPLOSIVE ENEMY</div>
+          <div class="unit-type" data-i18n="enemies.novaType">EXPLOSIVE ENEMY</div>
           <h3>Nova Guard</h3>
-          <p>
+          <p data-i18n="enemies.novaDescription">
             A green explosive unit that suddenly lunges toward you and detonates at close range.
             Its explosion deals heavy damage, making reaction time and spacing especially important.
           </p>
           <div class="unit-meta">
-            <span class="tag">LUNGE</span>
-            <span class="tag">HIGH EXPLOSIVE DAMAGE</span>
+            <span class="tag" data-i18n="enemies.lungeTag">LUNGE</span>
+            <span class="tag" data-i18n="enemies.explosiveTag">HIGH EXPLOSIVE DAMAGE</span>
           </div>
         </article>
 
         <article class="unit elite-mech reveal">
           <div class="unit-art">
-            <img src="assets/enemy-elite-mech.jpg" alt="Elite Mech boss from Nova Survival">
+            <img src="assets/enemy-elite-mech.jpg" alt="Elite Mech boss from Nova Survival" data-i18n-alt="alt.elite">
           </div>
-          <div class="unit-type">BOSS ENEMY</div>
+          <div class="unit-type" data-i18n="enemies.eliteType">BOSS ENEMY</div>
           <h3>Elite Mech</h3>
-          <p>
+          <p data-i18n="enemies.eliteDescription">
             A high-health boss with dangerous contact damage and a three-projectile ranged attack.
             Taking it down demands more focus, but it rewards the risk by dropping significantly more XP.
           </p>
           <div class="unit-meta">
-            <span class="tag">BOSS</span>
-            <span class="tag">3-SHOT ATTACK</span>
-            <span class="tag">BONUS XP</span>
+            <span class="tag" data-i18n="enemies.bossTag">BOSS</span>
+            <span class="tag" data-i18n="enemies.shotTag">3-SHOT ATTACK</span>
+            <span class="tag" data-i18n="enemies.xpTag">BONUS XP</span>
           </div>
         </article>
 
@@ -941,19 +1012,19 @@
   <section class="section" id="gallery">
     <div class="container">
       <div class="section-head reveal">
-        <div class="eyebrow">GAMEPLAY GALLERY</div>
-        <h2>From clean starts to screen-filling builds.</h2>
-        <p>A run changes fast. The gallery follows that escalation across different moments and battlefield colors.</p>
+        <div class="eyebrow" data-i18n="gallery.eyebrow">GAMEPLAY GALLERY</div>
+        <h2 data-i18n="gallery.title">From clean starts to screen-filling builds.</h2>
+        <p data-i18n="gallery.description">A run changes fast. The gallery follows that escalation across different moments and battlefield colors.</p>
       </div>
       <div class="gallery">
-        <figure class="reveal"><img src="assets/gameplay-red.jpg" alt="Nova Survival gameplay red stage"></figure>
-        <figure class="reveal"><img src="assets/gameplay-red-2.jpg" alt="Nova Survival gameplay with projectiles"></figure>
-        <figure class="reveal"><img src="assets/gameplay-purple-1.jpg" alt="Nova Survival purple stage"></figure>
-        <figure class="reveal"><img src="assets/gameplay-purple-2.jpg" alt="Nova Survival mid run"></figure>
-        <figure class="reveal"><img src="assets/gameplay-purple-3.jpg" alt="Nova Survival larger build"></figure>
-        <figure class="reveal"><img src="assets/gameplay-dark.jpg" alt="Nova Survival dark late run"></figure>
-        <figure class="reveal"><img src="assets/level-up.jpg" alt="Nova Survival upgrade selection"></figure>
-        <figure class="reveal"><img src="assets/major-upgrade.jpg" alt="Nova Survival major upgrade selection"></figure>
+        <figure class="reveal"><img src="assets/gameplay-red.jpg" alt="Nova Survival gameplay red stage" data-i18n-alt="alt.galleryRed"></figure>
+        <figure class="reveal"><img src="assets/gameplay-red-2.jpg" alt="Nova Survival gameplay with projectiles" data-i18n-alt="alt.galleryProjectiles"></figure>
+        <figure class="reveal"><img src="assets/gameplay-purple-1.jpg" alt="Nova Survival purple stage" data-i18n-alt="alt.galleryPurple"></figure>
+        <figure class="reveal"><img src="assets/gameplay-purple-2.jpg" alt="Nova Survival mid run" data-i18n-alt="alt.galleryMid"></figure>
+        <figure class="reveal"><img src="assets/gameplay-purple-3.jpg" alt="Nova Survival larger build" data-i18n-alt="alt.galleryBuild"></figure>
+        <figure class="reveal"><img src="assets/gameplay-dark.jpg" alt="Nova Survival dark late run" data-i18n-alt="alt.galleryDark"></figure>
+        <figure class="reveal"><img src="assets/level-up.jpg" alt="Nova Survival upgrade selection" data-i18n-alt="alt.galleryLevel"></figure>
+        <figure class="reveal"><img src="assets/major-upgrade.jpg" alt="Nova Survival major upgrade selection" data-i18n-alt="alt.galleryMajor"></figure>
       </div>
     </div>
   </section>
@@ -961,9 +1032,9 @@
   <section class="section" id="community">
     <div class="container">
       <div class="social-wrap reveal">
-        <div class="eyebrow">FOLLOW NOVA SURVIVAL</div>
-        <h2>Updates, clips and new runs.</h2>
-        <p>Follow development and gameplay posts across the official Nova Survival channels.</p>
+        <div class="eyebrow" data-i18n="community.eyebrow">FOLLOW NOVA SURVIVAL</div>
+        <h2 data-i18n="community.title">Updates, clips and new runs.</h2>
+        <p data-i18n="community.description">Follow development and gameplay posts across the official Nova Survival channels.</p>
         <div class="social-links">
           <a class="social" href="https://www.instagram.com/novasurvivalgame/" target="_blank" rel="noopener noreferrer">Instagram</a>
           <a class="social" href="https://www.tiktok.com/@novasurvivalgame?lang=" target="_blank" rel="noopener noreferrer">TikTok</a>
@@ -974,18 +1045,19 @@
   </section>
 
   <section class="container cta reveal">
-    <h2>How long can you survive?</h2>
-    <p>Build your run, survive the pressure and push for a higher score.</p>
-    <a class="button primary" href="https://play.google.com/store/apps/details?id=com.novasurvival.android" target="_blank" rel="noopener noreferrer">PLAY NOVA SURVIVAL</a>
+    <h2 data-i18n="cta.title">How long can you survive?</h2>
+    <p data-i18n="cta.description">Build your run, survive the pressure and push for a higher score.</p>
+    <a class="button primary" href="https://play.google.com/store/apps/details?id=com.novasurvival.android" target="_blank" rel="noopener noreferrer" data-i18n="cta.play">PLAY NOVA SURVIVAL</a>
   </section>
 </main>
 
 <footer>
   <div class="container footer-inner">
-    <div>© 2026 Nova Survival. All rights reserved.</div>
+    <div data-i18n="footer.copyright">© 2026 Nova Survival. All rights reserved.</div>
     <div class="footer-links">
-      <a href="https://sites.google.com/view/novasurvivalprivacypolicy/ana-sayfa" target="_blank" rel="noopener noreferrer">Privacy Policy</a>
-      <a href="mailto:novasurvivalgame@gmail.com">Contact</a>
+      <a href="https://sites.google.com/view/novasurvivalprivacypolicy/ana-sayfa" target="_blank" rel="noopener noreferrer" data-i18n="footer.privacy">Privacy Policy</a>
+      <a href="https://sites.google.com/view/novasurvivalprivacypolicy/terms-of-use" target="_blank" rel="noopener noreferrer" data-i18n="footer.terms">Terms of Use</a>
+      <a href="mailto:novasurvivalgame@gmail.com" data-i18n="footer.contact">Contact</a>
       <a href="https://www.instagram.com/novasurvivalgame/" target="_blank" rel="noopener noreferrer">Instagram</a>
       <a href="https://www.tiktok.com/@novasurvivalgame?lang=" target="_blank" rel="noopener noreferrer">TikTok</a>
       <a href="https://www.youtube.com/@NovaSurvivalGame" target="_blank" rel="noopener noreferrer">YouTube</a>
@@ -993,17 +1065,138 @@
   </div>
 </footer>
 
+<script src="translations.js"></script>
 <script>
+  const translations = window.NOVA_TRANSLATIONS || {};
+  const supportedLanguages = ['en', 'tr', 'de', 'fr', 'zh-Hans', 'ru', 'ar', 'ko', 'it', 'es', 'pt', 'ja'];
+  const languageStorageKey = 'novaSurvival.language';
+  const sourceStrings = {};
+  let currentLanguage = 'en';
+
+  document.querySelectorAll('[data-i18n]').forEach(element => {
+    sourceStrings[element.dataset.i18n] = element.textContent.trim();
+  });
+  document.querySelectorAll('[data-i18n-alt]').forEach(element => {
+    sourceStrings[element.dataset.i18nAlt] = element.getAttribute('alt');
+  });
+  document.querySelectorAll('[data-i18n-aria]').forEach(element => {
+    sourceStrings[element.dataset.i18nAria] = element.getAttribute('aria-label');
+  });
+
+  const sourceMetadata = {
+    'meta.title': document.title,
+    'meta.description': document.getElementById('metaDescription').content,
+    'meta.ogTitle': document.getElementById('ogTitle').content,
+    'meta.ogDescription': document.getElementById('ogDescription').content,
+    'aria.closeMenu': 'Close menu'
+  };
+
   const menuBtn = document.getElementById('menuBtn');
   const navLinks = document.getElementById('navLinks');
+  const languageSelect = document.getElementById('languageSelect');
+  const metaDescription = document.getElementById('metaDescription');
+  const ogTitle = document.getElementById('ogTitle');
+  const ogDescription = document.getElementById('ogDescription');
+
+  const normalizeLanguage = value => {
+    if (!value || typeof value !== 'string') return null;
+
+    const normalized = value.trim().replace(/_/g, '-').toLowerCase();
+    const exact = supportedLanguages.find(language => language.toLowerCase() === normalized);
+    if (exact) return exact;
+
+    if (['zh', 'zh-cn', 'zh-sg', 'zh-hans'].includes(normalized)) return 'zh-Hans';
+    if (normalized.startsWith('zh-hant') || /^(zh-tw|zh-hk|zh-mo)/.test(normalized)) return null;
+
+    const base = normalized.split('-')[0];
+    return supportedLanguages.find(language => language === base) || null;
+  };
+
+  const translationFor = key => {
+    const localeStrings = translations[currentLanguage];
+    const nestedValue = key.split('.').reduce(
+      (value, segment) => value && typeof value === 'object' ? value[segment] : undefined,
+      localeStrings
+    );
+
+    return localeStrings?.[key]
+      ?? nestedValue
+      ?? sourceStrings[key]
+      ?? sourceMetadata[key]
+      ?? '';
+  };
+
+  const setMenuOpen = isOpen => {
+    navLinks.classList.toggle('open', isOpen);
+    menuBtn.setAttribute('aria-expanded', String(isOpen));
+    menuBtn.setAttribute('aria-label', translationFor(isOpen ? 'aria.closeMenu' : 'aria.openMenu'));
+  };
+
+  const applyLanguage = (language, persist = false) => {
+    currentLanguage = normalizeLanguage(language) || 'en';
+    document.documentElement.lang = currentLanguage;
+    document.documentElement.dir = currentLanguage === 'ar' ? 'rtl' : 'ltr';
+    languageSelect.value = currentLanguage;
+
+    document.querySelectorAll('[data-i18n]').forEach(element => {
+      element.textContent = translationFor(element.dataset.i18n);
+    });
+    document.querySelectorAll('[data-i18n-alt]').forEach(element => {
+      element.setAttribute('alt', translationFor(element.dataset.i18nAlt));
+    });
+    document.querySelectorAll('[data-i18n-aria]').forEach(element => {
+      element.setAttribute('aria-label', translationFor(element.dataset.i18nAria));
+    });
+
+    document.title = translationFor('meta.title');
+    metaDescription.content = translationFor('meta.description');
+    ogTitle.content = translationFor('meta.ogTitle');
+    ogDescription.content = translationFor('meta.ogDescription');
+    setMenuOpen(false);
+
+    if (persist) {
+      try {
+        localStorage.setItem(languageStorageKey, currentLanguage);
+      } catch (_) {
+        // The selected language still applies when storage is unavailable.
+      }
+    }
+  };
+
+  const preferredLanguage = () => {
+    try {
+      const storedLanguage = normalizeLanguage(localStorage.getItem(languageStorageKey));
+      if (storedLanguage) return storedLanguage;
+    } catch (_) {
+      // Fall through to browser preferences when storage is unavailable.
+    }
+
+    const browserLanguages = Array.isArray(navigator.languages) && navigator.languages.length
+      ? navigator.languages
+      : [navigator.language];
+
+    for (const browserLanguage of browserLanguages) {
+      const match = normalizeLanguage(browserLanguage);
+      if (match) return match;
+    }
+    return 'en';
+  };
 
   menuBtn.addEventListener('click', () => {
-    navLinks.classList.toggle('open');
+    setMenuOpen(!navLinks.classList.contains('open'));
   });
 
   document.querySelectorAll('#navLinks a').forEach(a => {
-    a.addEventListener('click', () => navLinks.classList.remove('open'));
+    a.addEventListener('click', () => setMenuOpen(false));
   });
+
+  languageSelect.addEventListener('change', event => applyLanguage(event.target.value, true));
+
+  document.addEventListener('keydown', event => {
+    if (event.key === 'Escape') setMenuOpen(false);
+  });
+
+  applyLanguage(preferredLanguage());
 
   const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
