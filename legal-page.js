@@ -1,63 +1,34 @@
 (() => {
-  const source = document.getElementById("legal-source");
-  const target = document.getElementById("legal-content");
-  if (!source || !target) return;
-
-  const lines = source.textContent.replace(/^\s+|\s+$/g, "").split(/\n/);
-  let list = null;
-  let paragraph = [];
-
-  const flushList = () => {
-    if (list) target.appendChild(list);
-    list = null;
+  // The full policy and section links are in HTML and work without JavaScript.
+  const links = [...document.querySelectorAll('.toc-links a')];
+  const headings = [...document.querySelectorAll('#legal-content h2[id]')];
+  if (!links.length || !headings.length) return;
+  const mark = (id) => {
+    links.forEach((link) => {
+      if (link.hash === `#${id}`) link.setAttribute('aria-current', 'location');
+      else link.removeAttribute('aria-current');
+    });
   };
-
-  const flushParagraph = () => {
-    if (!paragraph.length) return;
-    const node = document.createElement("p");
-    node.textContent = paragraph.join(" ");
-    target.appendChild(node);
-    paragraph = [];
+  links.forEach((link) => link.addEventListener('click', () => {
+    mark(link.hash.slice(1));
+    const heading = document.getElementById(link.hash.slice(1));
+    if (heading) heading.focus({ preventScroll: true });
+  }));
+  let pending = false;
+  const update = () => {
+    pending = false;
+    const header = document.querySelector('.legal-header');
+    const offset = (header ? header.getBoundingClientRect().height : 0) + 40;
+    let current = headings[0];
+    for (const heading of headings) {
+      if (heading.getBoundingClientRect().top <= offset) current = heading;
+      else break;
+    }
+    mark(current.id);
   };
-
-  lines.forEach((rawLine) => {
-    const line = rawLine.trim();
-    if (!line) {
-      flushParagraph();
-      flushList();
-      return;
-    }
-
-    if (/^\d+\.\s/.test(line)) {
-      flushParagraph();
-      flushList();
-      const heading = document.createElement("h2");
-      heading.textContent = line;
-      target.appendChild(heading);
-      return;
-    }
-
-    if (line.startsWith("• ")) {
-      flushParagraph();
-      if (!list) list = document.createElement("ul");
-      const item = document.createElement("li");
-      item.textContent = line.slice(2);
-      list.appendChild(item);
-      return;
-    }
-
-    if (["Apple App Store", "Google Play", "Virtual content:"].includes(line)) {
-      flushParagraph();
-      flushList();
-      const heading = document.createElement("h3");
-      heading.textContent = line;
-      target.appendChild(heading);
-      return;
-    }
-
-    paragraph.push(line);
-  });
-
-  flushParagraph();
-  flushList();
+  window.addEventListener('scroll', () => {
+    if (!pending) { pending = true; requestAnimationFrame(update); }
+  }, { passive: true });
+  window.addEventListener('resize', update);
+  update();
 })();
